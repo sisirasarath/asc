@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Support Cell | MACE</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Academic Support Cell | MACE">
+    <meta name="description" content="Official academic support portal by SFI Mar Athanasius College of Engineering (MACE). Get comprehensive KTU B.Tech notes, previous year question papers, scholarships, SGPA calculator, and student grievance support.">
+    <meta name="keywords" content="MACE, Mar Athanasius College of Engineering, SFI MACE, academic support cell, ktu notes, engineering, sgpa calculator, ktu 2024 scheme">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Splash Screen Loader (Reference Quality) -->
+    <div class="loader-wrapper" id="loader">
+        <div class="loader-content">
+            <div class="loader-logo-container">
+                <img src="images/asc_logo.jpg" alt="ASC Logo" class="loader-logo">
+            </div>
+            <div class="loader-progress-wrap">
+                <div class="loader-progress"></div>
+            </div>
+            <div class="loader-text">Academic Support Cell</div>
+        </div>
+    </div>
+
+    <!-- Dynamic Canvas Particle Background & Glowing Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="scholarship.html">Scholarship</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="index.html" class="active">Home</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="scholarship.html">Scholarship</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Hero Slider Section -->
+    <header class="hero">
+        <div class="slider">
+            <!-- Slide 1: MACE Campus -->
+            <div class="slide active">
+                <div class="slide-image" style="background-image: url('images/mace_campus.jpg'); background-position: center 40%;"></div>
+                <div class="slide-overlay"></div>
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="badge-dot"></span>
+                            <span>OFFICIAL ACADEMIC &amp; STUDENT PORTAL</span>
+                        </div>
+                        <h1>Legacy of <span class="gradient-text">Excellence.</span></h1>
+                        <p>Welcome to the Academic Support Cell of Mar Athanasius College of Engineering, Kothamangalam. Committed to enriching your engineering journey.</p>
+                        <div class="btn-group">
+                            <a href="#features" class="btn btn-primary">Explore Features <i class="fa-solid fa-arrow-right"></i></a>
+                            <a href="academics.html" class="btn btn-secondary"><i class="fa-solid fa-book-bookmark"></i> Study Materials</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: SFI Flag -->
+            <div class="slide">
+                <div class="slide-image" style="background-image: url('images/sfi_flag.jpg'); background-position: center center;"></div>
+                <div class="slide-overlay" style="background: linear-gradient(135deg, rgba(8,8,12,0.85) 0%, rgba(229,26,36,0.2) 100%);"></div>
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="badge-dot"></span>
+                            <span>STUDENTS FEDERATION OF INDIA &bull; MACE UNIT</span>
+                        </div>
+                        <h1>Students <span class="gradient-text">Federation of India.</span></h1>
+                        <p>SFI MACE Unit — Fighting for students' rights, academic freedom, and a progressive campus culture at Mar Athanasius College of Engineering.</p>
+                        <div class="btn-group">
+                            <a href="support.html" class="btn btn-primary">Student Support <i class="fa-solid fa-shield-halved"></i></a>
+                            <a href="scholarship.html" class="btn btn-secondary"><i class="fa-solid fa-graduation-cap"></i> Scholarship Hub</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Malayalam Motivational -->
+            <div class="slide">
+                <div class="slide-image" style="background-image: url('images/naam_thol.jpg'); background-position: center center;"></div>
+                <div class="slide-overlay" style="background: rgba(8,8,12,0.75);"></div>
+                <div class="container">
+                    <div class="hero-content">
+                        <div class="hero-badge">
+                            <span class="badge-dot"></span>
+                            <span>KTU CURATED STUDY MATERIALS</span>
+                        </div>
+                        <h1>KTU 2024 <span class="gradient-text">Scheme Syllabus.</span></h1>
+                        <p>Stay ahead with the latest KTU scheme study notes, lab records, reference syllabi, and solved previous year question papers.</p>
+                        <div class="btn-group">
+                            <a href="academics.html" class="btn btn-primary">Go to Academics <i class="fa-solid fa-book"></i></a>
+                            <a href="tools.html" class="btn btn-secondary"><i class="fa-solid fa-calculator"></i> Utility Tools</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slider-dots"></div>
+    </header>
+
+    <!-- Quick Stats Strip (Under Hero) -->
+    <div class="container stats-strip">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                <div>
+                    <div class="stat-value">388+</div>
+                    <div class="stat-label">Free Notes &amp; PYQs</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-microchip"></i></div>
+                <div>
+                    <div class="stat-value">5 Core</div>
+                    <div class="stat-label">Engineering Branches</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-users-gear"></i></div>
+                <div>
+                    <div class="stat-value">25+</div>
+                    <div class="stat-label">Active Clubs &amp; Cells</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                <div>
+                    <div class="stat-value">100%</div>
+                    <div class="stat-label">Free &amp; Student-Powered</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Support Hub Features Section -->
+    <section id="features">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-shapes"></i> CENTRAL PLATFORM</span>
+                <h2>Support <span class="gradient-text">Hub</span></h2>
+                <p>Tailored student resources for MACEians to achieve academic and professional success.</p>
+                <div class="red-divider"></div>
+            </div>
+
+            <div class="features-grid">
+                <!-- Academics -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='academics.html'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-book-open"></i>
+                    </div>
+                    <h3>Academics</h3>
+                    <p>Access KTU 2024 scheme semester notes, lab records, syllabus, and solved papers sorted by branch.</p>
+                    <a href="academics.html" class="card-link">Explore Resources <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Career -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='career.html'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-briefcase"></i>
+                    </div>
+                    <h3>Career Guidance</h3>
+                    <p>Internship resources, skill development programs, placement guides, and custom SOP templates.</p>
+                    <a href="career.html" class="card-link">Enhance Skills <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Scholarship -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='scholarship.html'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3>Scholarships</h3>
+                    <p>Stay informed about national, state, and local financial aid opportunities for engineering students.</p>
+                    <a href="scholarship.html" class="card-link">View Opportunities <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Student Support -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='support.html'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-handshake-angle"></i>
+                    </div>
+                    <h3>Student Support</h3>
+                    <p>Submit academic grievances or request support directly from SFI MACE Unit representatives.</p>
+                    <a href="support.html" class="card-link">Submit Request <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Tools -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='tools.html'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3>Utility Tools</h3>
+                    <p>Calculate your KTU SGPA/CGPA instantly or track attendance to maintain the required percentage.</p>
+                    <a href="tools.html" class="card-link">Open Toolkit <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Contribute -->
+                <div class="feature-card glass-panel scroll-reveal" onclick="window.location.href='notes.html#contribute'">
+                    <div class="card-glow"></div>
+                    <div class="card-icon">
+                        <i class="fa-solid fa-cloud-arrow-up"></i>
+                    </div>
+                    <h3>Contribute Notes</h3>
+                    <p>Help your peers! Submit your own notes, lecture summaries, or solved question papers directly into the repository.</p>
+                    <a href="notes.html#contribute" class="card-link">Upload Notes <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Discover MACE Section (Achievements & Attractions) -->
+    <section id="discover-mace" style="background: rgba(8, 8, 12, 0.3);">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-compass"></i> CAMPUS SPOTLIGHT</span>
+                <h2>Discover <span class="gradient-text">MACE</span></h2>
+                <p>Achievements and unique student attractions of Mar Athanasius College of Engineering.</p>
+                <div class="red-divider"></div>
+            </div>
+
+            <div class="why-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+                <!-- Achievement 1 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-landmark"></i></div>
+                    <h3>Pioneering Legacy</h3>
+                    <p>Pioneered engineering education in central Kerala in 1961. Managed by Mar Athanasius College Association and Aided by the Government of Kerala, MACE was the first in Asia under Christian Management.</p>
+                </div>
+                
+                <!-- Achievement 2 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-cubes"></i></div>
+                    <h3>Advanced Labs & Prototyping</h3>
+                    <p>Equipped with state-of-the-art experiential testing and research facilities including the **IoT Lab**, **FAB Lab**, and the **AICTE IDEA Lab** on campus.</p>
+                </div>
+
+                <!-- Achievement 3 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-masks-theater"></i></div>
+                    <h3>Takshak Techno Fest</h3>
+                    <p>Home of **Takshak**, MACE's national-level annual techno-cultural festival, which brings together engineering minds across India for competitions, exhibitions, and workshops.</p>
+                </div>
+
+                <!-- Achievement 4 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-lightbulb"></i></div>
+                    <h3>Entrepreneurship Ecosystem</h3>
+                    <p>Supported by the **IEDC** (Innovation & Entrepreneurship Development Cell) and **IIC** (Institutions Innovation Council) to spark startups and startup incubation.</p>
+                </div>
+
+                <!-- Achievement 5 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-guitar"></i></div>
+                    <h3>Vibrant Campus Life</h3>
+                    <p>Home to various student clubs including IEEE MACE, NSS, Sanskriti (Cultural Club), MACE Film Society, Quiz Club, Music Club, and the Literary & Debating Club.</p>
+                </div>
+
+                <!-- Achievement 6 -->
+                <div class="why-card glass-panel scroll-reveal">
+                    <div style="font-size: 2.2rem; color: var(--primary-red); margin-bottom: 12px;"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3>Distinguished Placements</h3>
+                    <p>Excellent campus placement drives with top multinational corporations, supported by a strong global Alumni Association representing MACE across the world.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why This Platform Section -->
+    <section id="why">
+        <div class="container">
+            <div class="section-header scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-shield-heart"></i> STUDENT-FIRST</span>
+                <h2>Why This <span class="gradient-text">Platform?</span></h2>
+                <p>Built by MACE students, for MACE students. Streamlining academic hurdles.</p>
+                <div class="red-divider"></div>
+            </div>
+
+            <div class="why-grid">
+                <div class="why-card glass-panel scroll-reveal">
+                    <div class="why-number">01</div>
+                    <h3>Centralized Repository</h3>
+                    <p>No more searching through disorganized WhatsApp chats and drives. Find syllabus, notes, and records under a unified filter.</p>
+                </div>
+                <div class="why-card glass-panel scroll-reveal">
+                    <div class="why-number">02</div>
+                    <h3>Engineered by Peers</h3>
+                    <p>Built directly by SFI MACE Unit members who encounter these exact academic requirements, ensuring highly relevant resource selection.</p>
+                </div>
+                <div class="why-card glass-panel scroll-reveal">
+                    <div class="why-number">03</div>
+                    <h3>Always Up-to-date</h3>
+                    <p>Continuously updated with the latest KTU regulations, academic schemes, and upcoming placement deadlines.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SFI Unit & Mission Section -->
+    <section id="missions" class="mission-section" style="background-image: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1600&auto=format&fit=crop');">
+        <div class="container">
+            <div class="sfi-intro glass-panel scroll-reveal">
+                <!-- Circular Avatar Placeholder with Red Accent -->
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-red), #ff333d); display: flex; align-items: center; justify-content: center; font-family: var(--font-heading); font-size: 1.8rem; font-weight: 800; color: white; box-shadow: 0 0 20px var(--primary-red-glow);">SFI</div>
+                <div class="sfi-intro-text">
+                    <h3>SFI MACE Unit</h3>
+                    <p>The leading student voice at Mar Athanasius College of Engineering. We stand for progressive student welfare, academic rights, and democratized education.</p>
+                </div>
+            </div>
+
+            <div class="section-header scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-flag"></i> CORE VALUES</span>
+                <h2>Our <span class="gradient-text">Missions</span></h2>
+                <div class="red-divider"></div>
+            </div>
+
+            <div class="missions-grid">
+                <div class="mission-card glass-panel scroll-reveal">
+                    <div class="mission-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h3>QUALITY EDUCATION</h3>
+                    <p>Committed to assuring modern learning facilities, fair evaluation, and accessible study materials.</p>
+                </div>
+                <div class="mission-card glass-panel scroll-reveal">
+                    <div class="mission-icon"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <h3>STUDENT RIGHTS</h3>
+                    <p>Advocating for democratic expression, grievance resolution, and academic representation.</p>
+                </div>
+                <div class="mission-card glass-panel scroll-reveal">
+                    <div class="mission-icon"><i class="fa-solid fa-users-viewfinder"></i></div>
+                    <h3>SOCIAL JUSTICE</h3>
+                    <p>Promoting equality, inclusivity, and equal educational access regardless of economic background.</p>
+                </div>
+                <div class="mission-card glass-panel scroll-reveal">
+                    <div class="mission-icon"><i class="fa-solid fa-people-group"></i></div>
+                    <h3>SOLIDARITY</h3>
+                    <p>Unifying students to support one another in achieving intellectual and career excellence.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Glass Footer matching asc.sficet.in -->
+    <footer class="glass-footer">
+        <div class="footer-top-accent"></div>
+
+        <div class="footer-inner">
+            <!-- COL 1: SFI Support Cell -->
+            <div class="footer-col-section scroll-reveal">
+                <div class="footer-asc-brand">
+                    <img src="images/asc_logo.jpg" alt="ASC Logo" class="footer-asc-logo" loading="lazy">
+                    <div>
+                        <h2 class="footer-asc-title">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                        <p class="footer-asc-sub">An initiative by SFI MACE Unit</p>
+                    </div>
+                </div>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI Support Cell">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank" class="fsoc fsoc-wa" title="WhatsApp Group">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+                <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank" class="footer-whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Group
+                </a>
+            </div>
+
+            <!-- COL 2: Quick Links (centred) -->
+            <section class="footer-col-section footer-col-middle scroll-reveal">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <nav class="footer-mid-links">
+                    <a href="index.html">Home</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="notes.html">Notes</a>
+                    <a href="career.html">Career</a>
+                    <a href="scholarship.html">Scholarship</a>
+                    <a href="support.html">Support</a>
+                    <a href="tools.html">Tools</a>
+                </nav>
+            </section>
+
+            <!-- COL 3: SFI MACE -->
+            <div class="footer-col-section footer-col-right scroll-reveal">
+                <div class="footer-logo-row">
+                    <img src="images/asc_logo.jpg" alt="SFI Logo" class="footer-sfi-logo" loading="lazy">
+                    <h2 class="footer-brand-title">SFI <span class="gradient-text">MACE</span></h2>
+                </div>
+                <p class="footer-brand-desc">Independence, Democracy, and Socialism</p>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI MACE Unit">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© SFI MACE 2026. All rights reserved.</p>
+            <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/canvas-bg.js"></script>
+    <script src="js/slider.js"></script>
+</body>
+</html>
+
+
+
+

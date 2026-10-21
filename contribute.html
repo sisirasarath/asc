@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contribute Study Materials | MACE Academic Support Cell</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .contrib-hero-card {
+            background: linear-gradient(145deg, rgba(20, 20, 26, 0.85), rgba(10, 10, 14, 0.95));
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            text-align: center;
+            backdrop-filter: blur(25px);
+            margin-bottom: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+        .contrib-hero-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 10%; right: 10%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-red), transparent);
+        }
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 3.5rem;
+        }
+        .channel-card {
+            background: rgba(18, 18, 24, 0.85);
+            border: 1px solid var(--border-glass);
+            border-radius: 22px;
+            padding: 2.4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(20px);
+            overflow: hidden;
+        }
+        .channel-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 45px rgba(0,0,0,0.6);
+        }
+        .channel-drive:hover {
+            border-color: rgba(229, 26, 36, 0.55);
+            box-shadow: 0 20px 50px rgba(229, 26, 36, 0.22);
+        }
+        .channel-whatsapp:hover {
+            border-color: rgba(37, 211, 102, 0.55);
+            box-shadow: 0 20px 50px rgba(37, 211, 102, 0.22);
+        }
+        .channel-ico {
+            width: 75px;
+            height: 75px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            margin-bottom: 1.5rem;
+            transition: 0.35s;
+        }
+        .ico-drive {
+            background: rgba(229, 26, 36, 0.12);
+            border: 1px solid rgba(229, 26, 36, 0.3);
+            color: var(--primary-red);
+        }
+        .channel-drive:hover .ico-drive {
+            background: var(--primary-red);
+            color: white;
+            transform: scale(1.08) rotate(-6deg);
+            box-shadow: 0 8px 25px var(--primary-red-glow);
+        }
+        .ico-wa {
+            background: rgba(37, 211, 102, 0.12);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            color: #25d366;
+        }
+        .channel-whatsapp:hover .ico-wa {
+            background: #25d366;
+            color: white;
+            transform: scale(1.08) rotate(6deg);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+        .channel-title {
+            font-size: 1.45rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+        .channel-desc {
+            color: var(--text-muted);
+            font-size: 0.94rem;
+            line-height: 1.6;
+            margin-bottom: 2.2rem;
+            flex-grow: 1;
+        }
+        .channel-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: 0.3s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn-drive {
+            background: linear-gradient(135deg, var(--primary-red), #b7151f);
+            color: white;
+            box-shadow: 0 8px 25px var(--primary-red-glow);
+        }
+        .btn-drive:hover {
+            box-shadow: 0 12px 35px rgba(229, 26, 36, 0.55);
+            transform: translateY(-2px);
+        }
+        .btn-wa {
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.35);
+        }
+        .btn-wa:hover {
+            box-shadow: 0 12px 35px rgba(37, 211, 102, 0.55);
+            transform: translateY(-2px);
+        }
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3.5rem;
+        }
+        .step-tile {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            padding: 2rem 1.8rem;
+            backdrop-filter: blur(15px);
+            transition: 0.3s;
+        }
+        .step-tile:hover {
+            border-color: rgba(229, 26, 36, 0.4);
+            transform: translateY(-4px);
+        }
+        .step-badge {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: rgba(229, 26, 36, 0.3);
+            font-family: var(--font-heading);
+            margin-bottom: 0.5rem;
+        }
+        .step-tile h4 {
+            font-size: 1.1rem;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .step-tile p {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+            margin: 0;
+        }
+        .guidelines-box {
+            background: rgba(99, 102, 241, 0.05);
+            border: 1px solid rgba(99, 102, 241, 0.22);
+            border-radius: 22px;
+            padding: 2.2rem 2.5rem;
+            margin-bottom: 4rem;
+            backdrop-filter: blur(15px);
+        }
+        .guidelines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        .guideline-point {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            font-size: 0.9rem;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+        .guideline-point i {
+            color: #10b981;
+            margin-top: 4px;
+            font-size: 0.95rem;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="scholarship.html">Scholarship</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="scholarship.html">Scholarship</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner">
+        <div class="container">
+            <div class="page-banner-content scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-hand-holding-heart"></i> STUDENT EMPOWERMENT</span>
+                <h1>Contribute <span class="gradient-text">Study Materials</span></h1>
+                <p>Help your fellow peers by sharing handwritten notes, lab records, solved question papers, and academic resources.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section style="padding: 20px 0 80px 0;">
+        <div class="container" style="max-width: 960px;">
+            
+            <!-- Navigation Back Button -->
+            <div style="text-align: center; margin-bottom: 30px;">
+                <a href="notes.html" class="btn btn-secondary" style="border-radius: 50px; padding: 10px 24px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Notes Hub
+                </a>
+            </div>
+
+            <!-- Two Direct Contribution Channels (Drive & WhatsApp Only) -->
+            <div class="channels-grid scroll-reveal">
+                
+                <!-- Option 1: Google Drive -->
+                <div class="channel-card channel-drive">
+                    <div class="channel-ico ico-drive">
+                        <i class="fa-brands fa-google-drive"></i>
+                    </div>
+                    <h3 class="channel-title">
+                        Open Google Drive Folder
+                    </h3>
+                    <p class="channel-desc">
+                        Upload your PDF notes, solved internal papers, or reference materials directly into the official MACE ASC Cloud Folder. Open access &mdash; no special permissions required.
+                    </p>
+                    <a href="https://drive.google.com/drive/folders/1zITR4fooYBl2_gOdFOATBJBeVmm1jAKR" target="_blank" rel="noopener" class="channel-btn btn-drive">
+                        <i class="fa-brands fa-google-drive"></i> Open Google Drive Folder
+                    </a>
+                </div>
+
+                <!-- Option 2: WhatsApp -->
+                <div class="channel-card channel-whatsapp">
+                    <div class="channel-ico ico-wa">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <h3 class="channel-title">
+                        Send via WhatsApp
+                    </h3>
+                    <p class="channel-desc">
+                        Prefer sharing files or links directly? Send your materials straight to the MACE ASC Academic Coordinator or community group for quick review and verification.
+                    </p>
+                    <a href="https://chat.whatsapp.com/ISKrPHFRsVZK33hp65Fklk?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank" rel="noopener" class="channel-btn btn-wa">
+                        <i class="fa-brands fa-whatsapp"></i> Send via WhatsApp
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- How to Contribute Steps -->
+            <div class="sem-title" style="margin-bottom: 1.5rem; text-align: center;">
+                <h2>How It <span class="red-text">Works</span></h2>
+                <span class="count-pill">3 Quick Steps</span>
+            </div>
+            
+            <div class="steps-grid scroll-reveal">
+                <div class="step-tile">
+                    <div class="step-badge">01</div>
+                    <h4>Choose Your Platform</h4>
+                    <p>Select either Google Drive for bulk document upload or WhatsApp for instant messaging and queries.</p>
+                </div>
+                <div class="step-tile">
+                    <div class="step-badge">02</div>
+                    <h4>Share Your Resource</h4>
+                    <p>Upload your PDF or images. Please use a clean naming format: <em>Subject_Module_Semester.pdf</em>.</p>
+                </div>
+                <div class="step-tile">
+                    <div class="step-badge">03</div>
+                    <h4>Reviewed &amp; Published</h4>
+                    <p>The ASC team reviews and categorizes the submission into the MACE Notes Portal to help hundreds of peers.</p>
+                </div>
+            </div>
+
+            <!-- Guidelines Box -->
+            <div class="guidelines-box scroll-reveal">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <i class="fa-solid fa-circle-info" style="font-size: 1.5rem; color: #a5b4fc;"></i>
+                    <h3 style="color: white; margin: 0; font-size: 1.25rem;">Submission Guidelines</h3>
+                </div>
+                <div class="guidelines-grid">
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Upload as <strong style="color:white;">PDF format</strong> for highest quality across mobile and desktop</span>
+                    </div>
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Include <strong style="color:white;">Subject Name, Code &amp; Semester</strong> in the document name</span>
+                    </div>
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Handwritten notes are strongly encouraged &mdash; ensure pages are <strong style="color:white;">legible &amp; complete</strong></span>
+                    </div>
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Follow the <strong style="color:white;">2024 KTU Scheme</strong> (or explicitly specify if 2019 scheme)</span>
+                    </div>
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Module-wise separated files are preferred over one oversized document</span>
+                    </div>
+                    <div class="guideline-point">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Do not upload copyrighted textbooks or paid commercial materials</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Glass Footer (Matching asc.sficet.in reference design) -->
+    <footer class="glass-footer">
+        <div class="footer-top-accent"></div>
+        <div class="footer-inner">
+
+            <!-- COL 1: SFI Support Cell -->
+            <div class="footer-col-section scroll-reveal">
+                <div class="footer-asc-brand">
+                    <img src="images/asc_logo.jpg" alt="SFI Support Cell Logo" class="footer-asc-logo" loading="lazy">
+                    <div>
+                        <h2 class="footer-asc-title">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                        <p class="footer-asc-sub">An initiative by SFI MACE Unit</p>
+                    </div>
+                </div>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI MACE">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://chat.whatsapp.com/ISKrPHFRsVZK33hp65Fklk?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank" class="fsoc fsoc-wa" title="WhatsApp Community">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+                <a href="https://chat.whatsapp.com/ISKrPHFRsVZK33hp65Fklk?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank" class="footer-whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i>
+                    Join WhatsApp Community
+                </a>
+            </div>
+
+            <!-- COL 2: Quick Links (centred) -->
+            <section class="footer-col-section footer-col-middle scroll-reveal">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <nav class="footer-mid-links">
+                    <a href="index.html">Home</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="notes.html">Notes</a>
+                    <a href="career.html">Career</a>
+                    <a href="scholarship.html">Scholarship</a>
+                    <a href="support.html">Support</a>
+                    <a href="tools.html">Tools</a>
+                </nav>
+            </section>
+
+            <!-- COL 3: SFI MACE Unit -->
+            <div class="footer-col-section footer-col-right scroll-reveal">
+                <div class="footer-logo-row">
+                    <img src="images/asc_logo.jpg" alt="SFI Logo" class="footer-sfi-logo" loading="lazy">
+                    <h2 class="footer-brand-title">SFI <span class="gradient-text">MACE</span></h2>
+                </div>
+                <p class="footer-brand-desc">Independence, Democracy, and Socialism</p>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI MACE">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://chat.whatsapp.com/ISKrPHFRsVZK33hp65Fklk?s=cl&p=a&mlu=4&ilr=4&iam=2" target="_blank" class="fsoc fsoc-wa" title="WhatsApp Community">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            <p>© SFI MACE 2026. All rights reserved.</p>
+            <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/canvas-bg.js"></script>
+</body>
+</html>

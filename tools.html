@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Utility Tools | MACE Academic Support Cell</title>
+    <meta name="description" content="KTU SGPA & CGPA calculator for engineering students at MACE. Also includes an attendance tracker.">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ── Tool Tabs ─────────────────────────────────────── */
+        .tool-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-glass);
+            padding-bottom: 0;
+        }
+        .tool-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px 12px 0 0;
+            border: 1px solid transparent;
+            border-bottom: none;
+            background: rgba(255,255,255,0.03);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font-body);
+            position: relative;
+            bottom: -1px;
+        }
+        .tool-tab:hover { color: white; background: rgba(255,255,255,0.06); }
+        .tool-tab.active {
+            background: rgba(229,26,36,0.1);
+            border-color: var(--border-glass);
+            border-bottom-color: transparent;
+            color: white;
+        }
+        .tool-panel { display: none; }
+        .tool-panel.active { display: block; }
+
+        /* ── Calc Layout ────────────────────────────────────── */
+        .calc-two-col {
+            display: grid;
+            grid-template-columns: 1fr 320px;
+            gap: 28px;
+            align-items: start;
+        }
+        @media(max-width:900px){ .calc-two-col { grid-template-columns: 1fr; } }
+
+        /* ── Course Row ─────────────────────────────────────── */
+        .course-row {
+            display: grid;
+            grid-template-columns: 2.5fr 1fr 1.4fr 36px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        @media(max-width:600px){
+            .course-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .course-row .cr-name { grid-column: 1 / -1; }
+        }
+        .cr-remove {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid rgba(229,26,36,0.3);
+            background: rgba(229,26,36,0.08);
+            color: var(--primary-red);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .cr-remove:hover { background: rgba(229,26,36,0.2); }
+
+        /* ── Result Circle ──────────────────────────────────── */
+        .result-ring {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary-red) 0deg, rgba(255,255,255,0.04) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            position: relative;
+            transition: 1s ease;
+        }
+        .result-ring-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: #0d0d12;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .result-num { font-size: 1.6rem; font-weight: 800; color: white; font-family: var(--font-heading); line-height: 1; }
+        .result-unit { font-size: 0.65rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-top: 2px; }
+
+        /* ── Semester rows (CGPA tab) ─────────────────────── */
+        .sem-row {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 36px;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* ── Attendance bar ──────────────────────────────── */
+        .att-bar-wrap { height: 10px; border-radius: 10px; background: rgba(255,255,255,0.06); overflow: hidden; margin: 10px 0; }
+        .att-bar-fill { height: 100%; border-radius: 10px; transition: width 0.8s ease, background 0.5s; }
+
+        /* ── Grade dropdown ─────────────────────────────── */
+        select.input-field option { background: #111116; color: white; }
+        .input-field { font-family: var(--font-body); }
+        .add-row-btn {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 9px 18px; border-radius: 50px;
+            border: 1px dashed rgba(229,26,36,0.4);
+            background: rgba(229,26,36,0.04);
+            color: var(--primary-red); font-size: 0.84rem;
+            font-weight: 600; cursor: pointer; transition: 0.2s;
+            font-family: var(--font-body);
+        }
+        .add-row-btn:hover { background: rgba(229,26,36,0.1); border-style: solid; }
+
+        /* grade color codes */
+        .grade-s  { color: #fbbf24; }
+        .grade-ap { color: #a78bfa; }
+        .grade-a  { color: #60a5fa; }
+        .grade-f  { color: #f87171; }
+
+        /* ── Modern Academic Calculators UI ───────────────── */
+        .calc-header-box {
+            background: linear-gradient(135deg, rgba(229,26,36,0.06), rgba(99,102,241,0.04));
+            border: 1px solid var(--border-glass);
+            border-radius: 18px;
+            padding: 1.5rem 1.8rem;
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .calc-header-info { display: flex; align-items: center; gap: 1rem; }
+        .calc-header-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            background: rgba(229,26,36,0.12); border: 1px solid rgba(229,26,36,0.3);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.4rem; color: var(--primary-red); flex-shrink: 0;
+        }
+        .calc-header-title { font-size: 1.15rem; font-weight: 700; color: white; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .calc-scheme-pill {
+            font-size: 0.68rem; padding: 3px 10px; border-radius: 50px; font-weight: 700;
+            background: rgba(229,26,36,0.15); border: 1px solid rgba(229,26,36,0.35); color: #fca5a5;
+            letter-spacing: 0.5px; text-transform: uppercase;
+        }
+        .calc-header-sub { font-size: 0.82rem; color: var(--text-muted); line-height: 1.4; }
+
+        .calc-selectors-row {
+            display: grid;
+            grid-template-columns: 1.4fr 1.6fr;
+            gap: 16px;
+            margin-bottom: 1.5rem;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 14px;
+            padding: 14px 18px;
+            align-items: center;
+        }
+        @media(max-width:768px){ .calc-selectors-row { grid-template-columns: 1fr; } }
+
+        .calc-sel-label {
+            font-size: 0.76rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .calc-dept-select {
+            width: 100%;
+            padding: 10px 14px;
+            background: #111116;
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.88rem;
+            font-family: var(--font-body);
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .calc-dept-select:focus { border-color: var(--primary-red); }
+
+        .sem-buttons-wrap {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .sem-btn {
+            flex: 1;
+            min-width: 38px;
+            padding: 8px 10px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 8px;
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .sem-btn:hover { color: white; background: rgba(255,255,255,0.08); }
+        .sem-btn.active {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            color: white;
+            box-shadow: 0 4px 15px rgba(229,26,36,0.35);
+        }
+
+        .calc-subject-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 14px 18px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: 0.2s ease;
+        }
+        .calc-subject-card:hover {
+            background: rgba(255,255,255,0.04);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .calc-subject-main {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex: 1;
+            min-width: 0;
+        }
+        .calc-sub-index {
+            width: 28px; height: 28px; border-radius: 8px;
+            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.75rem; font-weight: 700; color: var(--text-muted); flex-shrink: 0;
+        }
+        .calc-sub-code {
+            padding: 4px 8px; border-radius: 6px;
+            background: rgba(99,102,241,0.12); border: 1px solid rgba(99,102,241,0.25);
+            color: #a5b4fc; font-size: 0.75rem; font-weight: 700; font-family: monospace; flex-shrink: 0;
+        }
+        .calc-sub-details { flex: 1; min-width: 0; }
+        .calc-sub-name {
+            font-size: 0.88rem; font-weight: 600; color: white;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            margin-bottom: 4px;
+        }
+        .calc-sub-badges { display: flex; align-items: center; gap: 6px; }
+        .badge-cr {
+            font-size: 0.72rem; padding: 2px 8px; border-radius: 50px;
+            background: rgba(99,102,241,0.15); border: 1px solid rgba(99,102,241,0.3);
+            color: #c7d2fe; font-weight: 600;
+        }
+        .badge-pf {
+            font-size: 0.72rem; padding: 2px 8px; border-radius: 50px;
+            background: rgba(251,191,36,0.12); border: 1px solid rgba(251,191,36,0.3);
+            color: #fde68a; font-weight: 600;
+        }
+
+        .calc-grade-wrap { flex-shrink: 0; width: 190px; }
+        @media(max-width:600px){
+            .calc-subject-card { flex-direction: column; align-items: stretch; gap: 10px; }
+            .calc-grade-wrap { width: 100%; }
+        }
+        .calc-grade-select {
+            width: 100%;
+            padding: 9px 12px;
+            background: #111116;
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.82rem;
+            outline: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .calc-grade-select:focus { border-color: var(--primary-red); }
+
+        .calc-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            margin-top: 14px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .quick-fill-btn {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-muted);
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .quick-fill-btn:hover { color: white; background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+
+        .res-rating-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.4px;
+            margin-top: 8px;
+            margin-bottom: 10px;
+            background: rgba(255,255,255,0.05);
+            color: var(--text-muted);
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .badge-res-emerald { background: rgba(16,185,129,0.15); border-color: rgba(16,185,129,0.35); color: #6ee7b7; }
+        .badge-res-blue { background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.35); color: #93c5fd; }
+        .badge-res-cyan { background: rgba(6,182,212,0.15); border-color: rgba(6,182,212,0.35); color: #67e8f9; }
+        .badge-res-amber { background: rgba(251,191,36,0.15); border-color: rgba(251,191,36,0.35); color: #fde68a; }
+        .badge-res-red { background: rgba(239,68,68,0.15); border-color: rgba(239,68,68,0.35); color: #fca5a5; }
+
+        .stats-grid-mini {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--border-glass);
+            text-align: left;
+        }
+        .stat-mini-item {
+            background: rgba(255,255,255,0.02);
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.04);
+        }
+        .stat-mini-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-mini-val { font-size: 1.05rem; font-weight: 700; color: white; margin-top: 2px; }
+
+        .mode-toggle-group {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 3px;
+            gap: 4px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 7px 14px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            white-space: nowrap;
+        }
+        .mode-btn.active { background: rgba(229,26,36,0.2); color: white; border: 1px solid rgba(229,26,36,0.4); }
+
+        .cgpa-sem-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 10px;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+        .cgpa-sem-label { font-size: 0.88rem; font-weight: 600; color: white; width: 110px; flex-shrink: 0; }
+        .cgpa-sem-credits { font-size: 0.76rem; color: #a5b4fc; background: rgba(99,102,241,0.12); padding: 3px 8px; border-radius: 50px; }
+        .cgpa-sem-input-wrap { flex: 1; max-width: 180px; }
+        .cgpa-sem-input { padding: 8px 12px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="scholarship.html">Scholarship</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="tools.html" class="active">Tools</a></li>
+            </ul>
+
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="scholarship.html">Scholarship</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="tools.html" class="active">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner">
+        <div class="container">
+            <div class="page-banner-content scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-calculator"></i> ACADEMIC SUITE</span>
+                <h1>Academic <span class="gradient-text">Calculators</span></h1>
+                <p>Calculate your SGPA and CGPA accurately with official MACE 2024 Scheme and KTU 2019 Scheme syllabus engines.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tools Section -->
+    <section style="padding: 50px 0 100px;">
+        <div class="container">
+
+            <!-- Tool Tabs -->
+            <div class="tool-tabs">
+                <button class="tool-tab active" id="tab-2024" onclick="switchTool('2024')">
+                    <i class="fa-solid fa-star"></i> SGPA — 2024 Scheme
+                </button>
+                <button class="tool-tab" id="tab-2019" onclick="switchTool('2019')">
+                    <i class="fa-solid fa-graduation-cap"></i> GPA &amp; CGPA — 2019 Scheme
+                </button>
+                <button class="tool-tab" id="tab-sgpa" onclick="switchTool('sgpa')">
+                    <i class="fa-solid fa-chart-simple"></i> Quick SGPA
+                </button>
+                <button class="tool-tab" id="tab-cgpa" onclick="switchTool('cgpa')">
+                    <i class="fa-solid fa-layer-group"></i> Quick CGPA
+                </button>
+            </div>
+
+            <!-- ══ SGPA Panel ══════════════════════════════════ -->
+            <div class="tool-panel" id="panel-sgpa">
+                <div class="calc-two-col">
+
+                    <!-- Left: Course Input -->
+                    <div class="calc-panel glass-panel scroll-reveal">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;border-bottom:1px solid var(--border-glass);padding-bottom:14px;">
+                            <h2 style="font-size:1.25rem;">KTU SGPA Calculator</h2>
+                            <button class="btn btn-secondary" id="sgpa-reset-btn" style="padding:8px 16px;font-size:0.82rem;">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </button>
+                        </div>
+
+                        <!-- Column headers -->
+                        <div class="course-row" style="margin-bottom:8px;">
+                            <span style="color:var(--text-muted);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;" class="cr-name">Subject / Course</span>
+                            <span style="color:var(--text-muted);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;text-align:center;">Credits</span>
+                            <span style="color:var(--text-muted);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Grade</span>
+                            <span></span>
+                        </div>
+
+                        <div id="sgpa-rows"></div>
+
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:10px;">
+                            <button class="add-row-btn" id="sgpa-add-btn">
+                                <i class="fa-solid fa-plus"></i> Add Course
+                            </button>
+                            <button class="btn btn-primary" id="sgpa-calc-btn" style="padding:11px 26px;">
+                                <i class="fa-solid fa-equals"></i> Calculate SGPA
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Result -->
+                    <div style="display:flex;flex-direction:column;gap:22px;">
+                        <div class="glass-panel scroll-reveal" style="text-align:center;padding:2rem 1.5rem;">
+                            <h3 style="font-size:1rem;color:var(--text-muted);margin-bottom:1.4rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your SGPA</h3>
+                            <div class="result-ring" id="sgpa-ring">
+                                <div class="result-ring-inner">
+                                    <span class="result-num" id="sgpa-val">—</span>
+                                    <span class="result-unit">SGPA</span>
+                                </div>
+                            </div>
+                            <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.6;" id="sgpa-feedback">Enter your courses and grades, then click Calculate.</p>
+                        </div>
+
+                        <!-- KTU Grade Reference -->
+                        <div class="glass-panel scroll-reveal" style="padding:1.4rem;">
+                            <p style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:12px;">KTU 2024 Grade Reference</p>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:0.8rem;">
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">S</span><span class="grade-s" style="font-weight:700;">10.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A+</span><span class="grade-ap" style="font-weight:700;">9.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A</span><span class="grade-a" style="font-weight:700;">8.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B+</span><span style="color:white;font-weight:700;">8.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B</span><span style="color:white;font-weight:700;">7.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C+</span><span style="color:white;font-weight:700;">7.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C</span><span style="color:white;font-weight:700;">6.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">D</span><span style="color:white;font-weight:700;">6.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">P</span><span style="color:white;font-weight:700;">5.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">F</span><span class="grade-f" style="font-weight:700;">0.0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ CGPA Panel ══════════════════════════════════ -->
+            <div class="tool-panel" id="panel-cgpa">
+                <div class="calc-two-col">
+                    <div class="calc-panel glass-panel scroll-reveal">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;border-bottom:1px solid var(--border-glass);padding-bottom:14px;">
+                            <h2 style="font-size:1.25rem;">KTU CGPA Calculator</h2>
+                            <button class="btn btn-secondary" id="cgpa-reset-btn" style="padding:8px 16px;font-size:0.82rem;">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </button>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.85rem;margin-bottom:1.4rem;">Enter SGPA and total credits for each completed semester.</p>
+
+                        <!-- Semester column headers -->
+                        <div class="sem-row" style="margin-bottom:8px;">
+                            <span style="color:var(--text-muted);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Semester SGPA</span>
+                            <span style="color:var(--text-muted);font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">Total Credits</span>
+                            <span></span>
+                        </div>
+
+                        <div id="cgpa-rows"></div>
+
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:10px;">
+                            <button class="add-row-btn" id="cgpa-add-btn">
+                                <i class="fa-solid fa-plus"></i> Add Semester
+                            </button>
+                            <button class="btn btn-primary" id="cgpa-calc-btn" style="padding:11px 26px;">
+                                <i class="fa-solid fa-equals"></i> Calculate CGPA
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- CGPA Result -->
+                    <div class="glass-panel scroll-reveal" style="text-align:center;padding:2rem 1.5rem;">
+                        <h3 style="font-size:1rem;color:var(--text-muted);margin-bottom:1.4rem;text-transform:uppercase;letter-spacing:1px;font-weight:600;">Your CGPA</h3>
+                        <div class="result-ring" id="cgpa-ring">
+                            <div class="result-ring-inner">
+                                <span class="result-num" id="cgpa-val">—</span>
+                                <span class="result-unit">CGPA</span>
+                            </div>
+                        </div>
+                        <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.6;" id="cgpa-feedback">Enter semester SGPAs and credits, then click Calculate.</p>
+                        <div id="cgpa-sems-summary" style="margin-top:14px;font-size:0.8rem;color:#555;"></div>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ══ MACE 2024 SGPA Panel (Native Extracted Engine) ══════ -->
+            <div class="tool-panel active" id="panel-2024">
+                <!-- Header Banner -->
+                <div class="calc-header-box scroll-reveal">
+                    <div class="calc-header-info">
+                        <div class="calc-header-icon"><i class="fa-solid fa-star"></i></div>
+                        <div>
+                            <div class="calc-header-title">
+                                MACE SGPA Calculator
+                                <span class="calc-scheme-pill">2024 Autonomous Scheme</span>
+                            </div>
+                            <div class="calc-header-sub">Official course curriculum and credit weights for Mar Athanasius College of Engineering. Select department and semester to compute your SGPA.</div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <button type="button" class="btn btn-secondary" onclick="MaceCalc.resetAll()" style="padding:8px 16px;font-size:0.82rem;">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selectors Row -->
+                <div class="calc-selectors-row scroll-reveal">
+                    <div>
+                        <label class="calc-sel-label" for="mace24-dept-select"><i class="fa-solid fa-building-columns" style="color:var(--primary-red);"></i> Select Department</label>
+                        <select class="calc-dept-select" id="mace24-dept-select"></select>
+                    </div>
+                    <div>
+                        <label class="calc-sel-label"><i class="fa-solid fa-layer-group" style="color:var(--primary-red);"></i> Select Semester</label>
+                        <div class="sem-buttons-wrap" id="mace24-sem-buttons"></div>
+                    </div>
+                </div>
+
+                <!-- Main Two-Column Layout -->
+                <div class="calc-two-col">
+                    <!-- Left: Course List & Grade Entry -->
+                    <div class="calc-panel glass-panel scroll-reveal">
+                        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;border-bottom:1px solid var(--border-glass);padding-bottom:12px;flex-wrap:wrap;gap:8px;">
+                            <div>
+                                <h3 style="font-size:1.1rem;color:white;margin:0;">Courses &amp; Grades</h3>
+                                <span style="font-size:0.75rem;color:var(--text-muted);">Subjects with 0 credits are Pass/Fail and do not affect SGPA</span>
+                            </div>
+                            <div style="font-size:0.8rem;color:var(--text-muted);">
+                                Graded Credits: <strong id="mace24-total-cr" style="color:white;font-size:0.95rem;">0</strong>
+                            </div>
+                        </div>
+
+                        <!-- Quick tools bar -->
+                        <div class="calc-toolbar">
+                            <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;"><i class="fa-solid fa-bolt" style="color:#fbbf24;margin-right:4px;"></i> Quick Fill:</span>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                <button type="button" class="quick-fill-btn" onclick="MaceCalc.quickFill('S')">All S (10)</button>
+                                <button type="button" class="quick-fill-btn" onclick="MaceCalc.quickFill('A+')">All A+ (9)</button>
+                                <button type="button" class="quick-fill-btn" onclick="MaceCalc.quickFill('A')">All A (8.5)</button>
+                                <button type="button" class="quick-fill-btn" onclick="MaceCalc.quickFill('B+')">All B+ (8)</button>
+                                <button type="button" class="quick-fill-btn" onclick="MaceCalc.resetAll()"><i class="fa-solid fa-rotate-left"></i> Clear</button>
+                            </div>
+                        </div>
+
+                        <div id="mace24-subjects-list"></div>
+
+                        <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+                            <button type="button" class="btn btn-primary" id="mace24-calc-btn" onclick="MaceCalc.calculate()" style="padding:12px 32px;font-size:0.95rem;width:100%;justify-content:center;">
+                                <i class="fa-solid fa-calculator"></i> Calculate SGPA
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Right: Results & Gauge -->
+                    <div style="display:flex;flex-direction:column;gap:20px;" id="mace24-result-box">
+                        <div class="glass-panel scroll-reveal" style="text-align:center;padding:2rem 1.5rem;">
+                            <h3 style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Semester SGPA</h3>
+                            <div class="result-ring" id="mace24-result-ring">
+                                <div class="result-ring-inner">
+                                    <span class="result-num" id="mace24-result-val">—</span>
+                                    <span class="result-unit">SGPA</span>
+                                </div>
+                            </div>
+                            <div class="res-rating-pill" id="mace24-result-badge">Awaiting Calculation</div>
+                            <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.5;margin-top:6px;" id="mace24-result-desc">Choose grades for all courses and click Calculate SGPA.</p>
+
+                            <!-- Mini Stats -->
+                            <div class="stats-grid-mini">
+                                <div class="stat-mini-item">
+                                    <div class="stat-mini-label">Total Points</div>
+                                    <div class="stat-mini-val" id="mace24-res-pts">—</div>
+                                </div>
+                                <div class="stat-mini-item">
+                                    <div class="stat-mini-label">Graded Cr</div>
+                                    <div class="stat-mini-val" id="mace24-res-cr">—</div>
+                                </div>
+                                <div class="stat-mini-item" style="grid-column: 1 / -1;">
+                                    <div class="stat-mini-label">Status</div>
+                                    <div class="stat-mini-val" id="mace24-res-status" style="font-size:0.9rem;">—</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Grade Scale Reference -->
+                        <div class="glass-panel scroll-reveal" style="padding:1.4rem;">
+                            <p style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px;"><i class="fa-solid fa-scale-balanced" style="margin-right:6px;color:var(--primary-red);"></i> MACE 2024 Grade Points</p>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:0.8rem;">
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">S</span><span class="grade-s" style="font-weight:700;">10.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A+</span><span class="grade-ap" style="font-weight:700;">9.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A</span><span class="grade-a" style="font-weight:700;">8.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B+</span><span style="color:white;font-weight:700;">8.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B</span><span style="color:white;font-weight:700;">7.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C+</span><span style="color:white;font-weight:700;">7.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C</span><span style="color:white;font-weight:700;">6.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">D</span><span style="color:white;font-weight:700;">6.0</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">P (Low Pass)</span><span style="color:white;font-weight:700;">5.5</span></div>
+                                <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">F / FE / I</span><span class="grade-f" style="font-weight:700;">0.0</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ══ KTU 2019 GPA Panel (Native Extracted Engine) ══════════ -->
+            <div class="tool-panel" id="panel-2019">
+                <!-- Header Banner -->
+                <div class="calc-header-box scroll-reveal">
+                    <div class="calc-header-info">
+                        <div class="calc-header-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                        <div>
+                            <div class="calc-header-title">
+                                KTU B.Tech GPA Calculator
+                                <span class="calc-scheme-pill">2019 Scheme</span>
+                            </div>
+                            <div class="calc-header-sub">Full syllabus, course codes, and weighted credit calculation for KTU B.Tech 2019 scheme across all engineering branches.</div>
+                        </div>
+                    </div>
+                    <div class="mode-toggle-group">
+                        <button type="button" class="mode-btn active" id="ktu19-mode-sgpa-btn" onclick="Ktu2019Calc.setMode('sgpa')">
+                            <i class="fa-solid fa-chart-simple"></i> Semester SGPA
+                        </button>
+                        <button type="button" class="mode-btn" id="ktu19-mode-cgpa-btn" onclick="Ktu2019Calc.setMode('cgpa')">
+                            <i class="fa-solid fa-layer-group"></i> Cumulative CGPA
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selectors Row -->
+                <div class="calc-selectors-row scroll-reveal">
+                    <div>
+                        <label class="calc-sel-label" for="ktu19-dept-select"><i class="fa-solid fa-diagram-project" style="color:var(--primary-red);"></i> Select Engineering Branch</label>
+                        <select class="calc-dept-select" id="ktu19-dept-select"></select>
+                    </div>
+                    <div id="ktu19-sem-selector-wrap">
+                        <label class="calc-sel-label"><i class="fa-solid fa-calendar-check" style="color:var(--primary-red);"></i> Select Semester</label>
+                        <div class="sem-buttons-wrap" id="ktu19-sem-buttons"></div>
+                    </div>
+                </div>
+
+                <!-- 1. Semester SGPA View -->
+                <div id="ktu19-sgpa-view">
+                    <div class="calc-two-col">
+                        <div class="calc-panel glass-panel scroll-reveal">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;border-bottom:1px solid var(--border-glass);padding-bottom:12px;flex-wrap:wrap;gap:8px;">
+                                <div>
+                                    <h3 style="font-size:1.1rem;color:white;margin:0;">Course Curriculum &amp; Grades</h3>
+                                    <span style="font-size:0.75rem;color:var(--text-muted);">Enter grades for official KTU course codes</span>
+                                </div>
+                                <div style="font-size:0.8rem;color:var(--text-muted);">
+                                    Graded Credits: <strong id="ktu19-total-cr" style="color:white;font-size:0.95rem;">0</strong>
+                                </div>
+                            </div>
+
+                            <!-- Quick tools bar -->
+                            <div class="calc-toolbar">
+                                <span style="font-size:0.75rem;color:var(--text-muted);font-weight:600;"><i class="fa-solid fa-bolt" style="color:#fbbf24;margin-right:4px;"></i> Quick Fill:</span>
+                                <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                    <button type="button" class="quick-fill-btn" onclick="Ktu2019Calc.quickFill('S')">All S (10)</button>
+                                    <button type="button" class="quick-fill-btn" onclick="Ktu2019Calc.quickFill('A+')">All A+ (9)</button>
+                                    <button type="button" class="quick-fill-btn" onclick="Ktu2019Calc.quickFill('A')">All A (8.5)</button>
+                                    <button type="button" class="quick-fill-btn" onclick="Ktu2019Calc.quickFill('B+')">All B+ (8)</button>
+                                    <button type="button" class="quick-fill-btn" onclick="Ktu2019Calc.resetAll()"><i class="fa-solid fa-rotate-left"></i> Clear</button>
+                                </div>
+                            </div>
+
+                            <div id="ktu19-subjects-list"></div>
+
+                            <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+                                <button type="button" class="btn btn-primary" id="ktu19-calc-btn" onclick="Ktu2019Calc.calculateSGPA()" style="padding:12px 32px;font-size:0.95rem;width:100%;justify-content:center;">
+                                    <i class="fa-solid fa-calculator"></i> Calculate SGPA
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Right: Results & Gauge -->
+                        <div style="display:flex;flex-direction:column;gap:20px;" id="ktu19-result-box">
+                            <div class="glass-panel scroll-reveal" style="text-align:center;padding:2rem 1.5rem;">
+                                <h3 style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;">KTU Semester SGPA</h3>
+                                <div class="result-ring" id="ktu19-result-ring">
+                                    <div class="result-ring-inner">
+                                        <span class="result-num" id="ktu19-result-val">—</span>
+                                        <span class="result-unit">SGPA</span>
+                                    </div>
+                                </div>
+                                <div class="res-rating-pill" id="ktu19-result-badge">Awaiting Calculation</div>
+                                <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.5;margin-top:6px;" id="ktu19-result-desc">Select grades for all subjects and click Calculate SGPA.</p>
+
+                                <!-- Mini Stats -->
+                                <div class="stats-grid-mini">
+                                    <div class="stat-mini-item">
+                                        <div class="stat-mini-label">Total Points</div>
+                                        <div class="stat-mini-val" id="ktu19-res-pts">—</div>
+                                    </div>
+                                    <div class="stat-mini-item">
+                                        <div class="stat-mini-label">Graded Cr</div>
+                                        <div class="stat-mini-val" id="ktu19-res-cr">—</div>
+                                    </div>
+                                    <div class="stat-mini-item" style="grid-column: 1 / -1;">
+                                        <div class="stat-mini-label">Backlog Status</div>
+                                        <div class="stat-mini-val" id="ktu19-res-status" style="font-size:0.9rem;">—</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- KTU 2019 Grade Reference -->
+                            <div class="glass-panel scroll-reveal" style="padding:1.4rem;">
+                                <p style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:10px;"><i class="fa-solid fa-scale-balanced" style="margin-right:6px;color:var(--primary-red);"></i> KTU 2019 Grade Scale</p>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:0.8rem;">
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">S</span><span class="grade-s" style="font-weight:700;">10.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A+</span><span class="grade-ap" style="font-weight:700;">9.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">A</span><span class="grade-a" style="font-weight:700;">8.5</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B+</span><span style="color:white;font-weight:700;">8.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">B</span><span style="color:white;font-weight:700;">7.5</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C+</span><span style="color:white;font-weight:700;">7.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">C</span><span style="color:white;font-weight:700;">6.5</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">D</span><span style="color:white;font-weight:700;">6.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">P (Pass)</span><span style="color:white;font-weight:700;">5.5</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">LP (Low Pass)</span><span style="color:white;font-weight:700;">4.0</span></div>
+                                    <div style="display:flex;justify-content:space-between;"><span style="color:var(--text-muted);">F (Failed)</span><span class="grade-f" style="font-weight:700;">0.0</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Cumulative CGPA View -->
+                <div id="ktu19-cgpa-view" style="display:none;">
+                    <div class="calc-two-col">
+                        <div class="calc-panel glass-panel scroll-reveal">
+                            <div style="margin-bottom:1.2rem;border-bottom:1px solid var(--border-glass);padding-bottom:12px;">
+                                <h3 style="font-size:1.1rem;color:white;margin:0 0 4px;">Cumulative CGPA Across Semesters</h3>
+                                <p style="font-size:0.8rem;color:var(--text-muted);margin:0;">Enter your SGPA for each completed semester. Credits are automatically weighted according to KTU 2019 curriculum.</p>
+                            </div>
+
+                            <div id="ktu19-cgpa-rows"></div>
+
+                            <div style="margin-top:1.5rem;display:flex;justify-content:flex-end;">
+                                <button type="button" class="btn btn-primary" onclick="Ktu2019Calc.calculateCGPA()" style="padding:12px 32px;font-size:0.95rem;width:100%;justify-content:center;">
+                                    <i class="fa-solid fa-calculator"></i> Calculate Cumulative CGPA
+                                </button>
+                            </div>
+                        </div>
+
+                        <div style="display:flex;flex-direction:column;gap:20px;">
+                            <div class="glass-panel scroll-reveal" style="text-align:center;padding:2rem 1.5rem;">
+                                <h3 style="font-size:0.85rem;color:var(--text-muted);margin-bottom:1.2rem;text-transform:uppercase;letter-spacing:1px;font-weight:700;">Overall Cumulative CGPA</h3>
+                                <div class="result-ring" id="ktu19-cgpa-ring">
+                                    <div class="result-ring-inner">
+                                        <span class="result-num" id="ktu19-cgpa-val">—</span>
+                                        <span class="result-unit">CGPA</span>
+                                    </div>
+                                </div>
+                                <div class="res-rating-pill" id="ktu19-cgpa-badge">Awaiting Input</div>
+                                <p style="color:var(--text-muted);font-size:0.82rem;line-height:1.5;margin-top:6px;" id="ktu19-cgpa-desc">Enter SGPAs for completed semesters to calculate your cumulative CGPA.</p>
+                                <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-glass);font-size:0.82rem;color:var(--text-muted);">
+                                    Total Weighted Credits: <strong id="ktu19-cgpa-tot-cr" style="color:white;">0</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Glass Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand scroll-reveal">
+                    <div class="footer-brand-title">
+                        <img src="images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:8px;flex-shrink:0;">
+                        <h2 style="font-size:1.25rem;">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                    </div>
+                    <p>An initiative by SFI MACE Unit. Streamlining resources to guide student wellness and professional goals.</p>
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank" class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div><div class="footer-contact scroll-reveal">
+                    <h3>Contact Us</h3>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Mar Athanasius College of Engineering, Kothamangalam, Kerala &mdash; 686 666</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>0485-2212200</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/canvas-bg.js"></script>
+    <script src="js/academic-calculators-data.js"></script>
+    <script src="js/academic-calculators.js"></script>
+
+    <script>
+    /* ════════════════════════════════════════
+       TOOL TAB SWITCHER
+    ════════════════════════════════════════ */
+    function switchTool(id) {
+        ['sgpa','cgpa','2019','2024'].forEach(function(t) {
+            document.getElementById('tab-' + t).classList.toggle('active', t === id);
+            document.getElementById('panel-' + t).classList.toggle('active', t === id);
+        });
+    }
+
+    /* ════════════════════════════════════════
+       SHARED GRADE POINTS (KTU 2024)
+    ════════════════════════════════════════ */
+    var GP = { S:10, 'A+':9, A:8.5, 'B+':8, B:7.5, 'C+':7, C:6.5, D:6, P:5.5, F:0 };
+
+    function gradeOptions(selected) {
+        return Object.keys(GP).map(function(g) {
+            return '<option value="' + g + '"' + (g === selected ? ' selected' : '') + '>' + g + ' (' + GP[g].toFixed(1) + ')</option>';
+        }).join('');
+    }
+
+    function setRing(ringId, value, max) {
+        var el = document.getElementById(ringId);
+        if (!el) return;
+        var pct = Math.min(value / max, 1);
+        var deg = Math.round(pct * 360);
+        var color = value >= 8 ? '#10b981' : value >= 6.5 ? '#3b82f6' : value >= 5.5 ? '#fbbf24' : '#ef4444';
+        el.style.background = 'conic-gradient(' + color + ' ' + deg + 'deg, rgba(255,255,255,0.04) ' + deg + 'deg)';
+    }
+
+    /* ════════════════════════════════════════
+       SGPA CALCULATOR
+    ════════════════════════════════════════ */
+    var sgpaRowCount = 0;
+
+    function addSgpaRow(name, credits, grade) {
+        sgpaRowCount++;
+        var id = sgpaRowCount;
+        var row = document.createElement('div');
+        row.className = 'course-row';
+        row.id = 'sgpa-row-' + id;
+        row.innerHTML =
+            '<input type="text" class="input-field cr-name" placeholder="e.g. Data Structures" value="' + (name || '') + '" style="height:40px;font-size:0.85rem;">' +
+            '<input type="number" class="input-field cr-credits" placeholder="Credits" value="' + (credits || '') + '" min="1" max="6" style="height:40px;text-align:center;font-size:0.9rem;">' +
+            '<select class="input-field cr-grade" style="height:40px;font-size:0.85rem;"><option value="">Grade</option>' + gradeOptions(grade) + '</select>' +
+            '<button class="cr-remove" onclick="removeSgpaRow(' + id + ')" title="Remove"><i class="fa-solid fa-xmark" style="font-size:0.8rem;"></i></button>';
+        document.getElementById('sgpa-rows').appendChild(row);
+    }
+
+    function removeSgpaRow(id) {
+        var el = document.getElementById('sgpa-row-' + id);
+        if (el) el.remove();
+    }
+
+    function calcSgpa() {
+        var rows = document.querySelectorAll('#sgpa-rows .course-row');
+        if (rows.length === 0) { alert('Please add at least one course.'); return; }
+        var total = 0, creds = 0, valid = true;
+        rows.forEach(function(r) {
+            var c = parseFloat(r.querySelector('.cr-credits').value);
+            var g = r.querySelector('.cr-grade').value;
+            if (!g || isNaN(c) || c <= 0) { valid = false; return; }
+            total += GP[g] * c;
+            creds += c;
+        });
+        if (!valid) { alert('Please fill Credits and Grade for all courses.'); return; }
+        var sgpa = total / creds;
+        document.getElementById('sgpa-val').textContent = sgpa.toFixed(2);
+        setRing('sgpa-ring', sgpa, 10);
+        var fb;
+        if (sgpa >= 9.0)      fb = '<span style="color:#10b981;font-weight:700;">Outstanding!</span> Excellent academic performance. SGPA: ' + sgpa.toFixed(2);
+        else if (sgpa >= 8.0) fb = '<span style="color:#3b82f6;font-weight:700;">First Class with Distinction</span> — great work! SGPA: ' + sgpa.toFixed(2);
+        else if (sgpa >= 6.5) fb = '<span style="color:#60a5fa;font-weight:700;">First Class</span> — good performance. SGPA: ' + sgpa.toFixed(2);
+        else if (sgpa >= 5.5) fb = 'Passed. Work harder next semester! SGPA: ' + sgpa.toFixed(2);
+        else                   fb = '<span style="color:#ef4444;font-weight:700;">Alert:</span> SGPA below 5.5. Check for arrears. SGPA: ' + sgpa.toFixed(2);
+        document.getElementById('sgpa-feedback').innerHTML = fb + '<br><small style="color:#555;">Total Credits: ' + creds + '</small>';
+    }
+
+    function resetSgpa() {
+        document.getElementById('sgpa-rows').innerHTML = '';
+        sgpaRowCount = 0;
+        document.getElementById('sgpa-val').textContent = '—';
+        document.getElementById('sgpa-feedback').textContent = 'Enter your courses and grades, then click Calculate.';
+        document.getElementById('sgpa-ring').style.background = 'conic-gradient(var(--primary-red) 0deg, rgba(255,255,255,0.04) 0deg)';
+        // Add 3 blank rows
+        addSgpaRow('', '', ''); addSgpaRow('', '', ''); addSgpaRow('', '', '');
+    }
+
+    /* ════════════════════════════════════════
+       CGPA CALCULATOR
+    ════════════════════════════════════════ */
+    var cgpaRowCount = 0;
+
+    function addCgpaRow(sgpa, credits) {
+        cgpaRowCount++;
+        var id = cgpaRowCount;
+        var row = document.createElement('div');
+        row.className = 'sem-row';
+        row.id = 'cgpa-row-' + id;
+        var semLabel = 'Semester ' + id;
+        row.innerHTML =
+            '<div style="position:relative;">' +
+              '<label style="position:absolute;left:14px;top:-8px;font-size:0.65rem;color:var(--text-muted);background:#0d0d12;padding:0 4px;font-weight:600;">' + semLabel + ' SGPA</label>' +
+              '<input type="number" class="input-field sem-sgpa" placeholder="e.g. 7.85" value="' + (sgpa || '') + '" min="0" max="10" step="0.01" style="height:44px;font-size:0.9rem;">' +
+            '</div>' +
+            '<div style="position:relative;">' +
+              '<label style="position:absolute;left:14px;top:-8px;font-size:0.65rem;color:var(--text-muted);background:#0d0d12;padding:0 4px;font-weight:600;">Credits</label>' +
+              '<input type="number" class="input-field sem-credits" placeholder="e.g. 22" value="' + (credits || '') + '" min="1" style="height:44px;text-align:center;font-size:0.9rem;">' +
+            '</div>' +
+            '<button class="cr-remove" onclick="removeCgpaRow(' + id + ')" title="Remove"><i class="fa-solid fa-xmark" style="font-size:0.8rem;"></i></button>';
+        document.getElementById('cgpa-rows').appendChild(row);
+    }
+
+    function removeCgpaRow(id) {
+        var el = document.getElementById('cgpa-row-' + id);
+        if (el) el.remove();
+    }
+
+    function calcCgpa() {
+        var rows = document.querySelectorAll('#cgpa-rows .sem-row');
+        if (rows.length === 0) { alert('Please add at least one semester.'); return; }
+        var total = 0, creds = 0, valid = true;
+        rows.forEach(function(r) {
+            var s = parseFloat(r.querySelector('.sem-sgpa').value);
+            var c = parseFloat(r.querySelector('.sem-credits').value);
+            if (isNaN(s) || isNaN(c) || s < 0 || s > 10 || c <= 0) { valid = false; return; }
+            total += s * c;
+            creds += c;
+        });
+        if (!valid) { alert('Please fill valid SGPA (0–10) and Credits for all semesters.'); return; }
+        var cgpa = total / creds;
+        document.getElementById('cgpa-val').textContent = cgpa.toFixed(2);
+        setRing('cgpa-ring', cgpa, 10);
+        var fb;
+        if (cgpa >= 9.0)      fb = '<span style="color:#10b981;font-weight:700;">Outstanding Overall Performance!</span>';
+        else if (cgpa >= 8.0) fb = '<span style="color:#3b82f6;font-weight:700;">First Class with Distinction</span>';
+        else if (cgpa >= 6.5) fb = '<span style="color:#60a5fa;font-weight:700;">First Class</span>';
+        else if (cgpa >= 5.5) fb = 'Pass Category';
+        else                   fb = '<span style="color:#ef4444;font-weight:700;">Below Pass — check arrears</span>';
+        document.getElementById('cgpa-feedback').innerHTML = fb + '<br><small style="color:#555;">Across ' + rows.length + ' semester(s) &bull; ' + creds + ' total credits</small>';
+    }
+
+    function resetCgpa() {
+        document.getElementById('cgpa-rows').innerHTML = '';
+        cgpaRowCount = 0;
+        document.getElementById('cgpa-val').textContent = '—';
+        document.getElementById('cgpa-feedback').textContent = 'Enter semester SGPAs and credits, then click Calculate.';
+        document.getElementById('cgpa-ring').style.background = 'conic-gradient(var(--primary-red) 0deg, rgba(255,255,255,0.04) 0deg)';
+        addCgpaRow('', ''); addCgpaRow('', '');
+    }
+
+    /* ════════════════════════════════════════
+       ATTENDANCE TRACKER
+    ════════════════════════════════════════ */
+    document.addEventListener('DOMContentLoaded', function() {
+        // Wire up SGPA
+        document.getElementById('sgpa-add-btn').addEventListener('click', function(){ addSgpaRow('','',''); });
+        document.getElementById('sgpa-calc-btn').addEventListener('click', calcSgpa);
+        document.getElementById('sgpa-reset-btn').addEventListener('click', resetSgpa);
+
+        // Wire up CGPA
+        document.getElementById('cgpa-add-btn').addEventListener('click', function(){ addCgpaRow('',''); });
+        document.getElementById('cgpa-calc-btn').addEventListener('click', calcCgpa);
+        document.getElementById('cgpa-reset-btn').addEventListener('click', resetCgpa);
+
+        // Initial rows
+        addSgpaRow('', '', ''); addSgpaRow('', '', ''); addSgpaRow('', '', '');
+        addCgpaRow('', ''); addCgpaRow('', '');
+
+        // Attendance (if present)
+        var attBtn = document.getElementById('calc-attendance-btn');
+        if (attBtn) {
+            attBtn.addEventListener('click', function() {
+                var con = parseInt(document.getElementById('conducted-hours').value);
+                var att = parseInt(document.getElementById('attended-hours').value);
+                if (isNaN(con) || isNaN(att) || con <= 0) { alert('Please enter valid values.'); return; }
+                if (att > con) { alert('Attended hours cannot exceed conducted hours.'); return; }
+                var pct = (att / con) * 100;
+                var pctEl = document.getElementById('attendance-percent');
+                pctEl.textContent = pct.toFixed(1) + '%';
+                document.getElementById('attendance-result').style.display = 'block';
+
+                var bar = document.getElementById('att-bar');
+                bar.style.width = Math.min(pct, 100) + '%';
+
+                var fb;
+                if (pct >= 75) {
+                    pctEl.style.color = '#10b981';
+                    bar.style.background = '#10b981';
+                    var canSkip = Math.floor((att - 0.75 * con) / 0.75);
+                    fb = canSkip > 0
+                        ? 'Safe! You can skip up to <strong style="color:#10b981;">' + canSkip + ' more hour(s)</strong> without dropping below 75%.'
+                        : 'You are exactly on the 75% boundary. <strong style="color:#ef4444;">Do not skip</strong> any classes.';
+                } else {
+                    pctEl.style.color = '#ef4444';
+                    bar.style.background = '#ef4444';
+                    var need = Math.ceil((0.75 * con - att) / 0.25);
+                    fb = '<strong style="color:#ef4444;">Below 75%!</strong> Attend the next <strong style="color:#ef4444;">' + need + ' consecutive hour(s)</strong> to recover above 75%.';
+                }
+                document.getElementById('attendance-feedback').innerHTML = fb;
+            });
+        }
+    });
+    </script>
+</body>
+</html>
+
+
+
+

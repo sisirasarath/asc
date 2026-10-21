@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Support & Welfare | Academic Support Cell</title>
+    <meta name="description"
+        content="Access direct assistance through the SFI MACE Student Support & Welfare Cell. Clubs, Tech Communities, Anti-Ragging Cell, Academic Support Cell and Grievance Cell.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Category Selection Cards ─────────────────────── */
+        .support-intro {
+            text-align: center;
+            margin-bottom: 3.5rem;
+        }
+
+        .support-intro h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            margin-bottom: 0.7rem;
+        }
+
+        .support-intro p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        .cat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 5rem;
+        }
+
+        .cat-card {
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            height: 300px;
+            border: 1px solid var(--border-glass);
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cat-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary-red);
+            box-shadow: 0 24px 50px rgba(229, 26, 36, 0.2);
+        }
+
+        .cat-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.5s ease;
+            filter: brightness(0.38) saturate(1.1);
+        }
+
+        .cat-card:hover .cat-bg {
+            transform: scale(1.06);
+            filter: brightness(0.25) saturate(1.2);
+        }
+
+        .cat-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 30%, rgba(8, 8, 12, 0.97) 100%);
+        }
+
+        .cat-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            transform: translateY(8px);
+            transition: 0.4s;
+        }
+
+        .cat-card:hover .cat-content {
+            transform: translateY(0);
+        }
+
+        .cat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: rgba(229, 26, 36, 0.15);
+            border: 1px solid rgba(229, 26, 36, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+            transition: 0.3s;
+        }
+
+        .cat-card:hover .cat-icon {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 0 20px var(--primary-red-glow);
+        }
+
+        .cat-content h3 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.4rem;
+            font-family: var(--font-heading);
+        }
+
+        .cat-content p {
+            font-size: 0.83rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1rem;
+        }
+
+        .cat-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(229, 26, 36, 0.4);
+            background: rgba(229, 26, 36, 0.1);
+            color: var(--primary-red);
+            font-size: 0.82rem;
+            font-weight: 700;
+            transition: 0.3s;
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        .cat-card:hover .cat-btn {
+            opacity: 1;
+            transform: translateY(0);
+            background: var(--primary-red);
+            color: white;
+            border-color: var(--primary-red);
+        }
+
+        .cat-count {
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            background: rgba(229, 26, 36, 0.15);
+            border: 1px solid rgba(229, 26, 36, 0.3);
+            border-radius: 50px;
+            padding: 4px 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--primary-red);
+            backdrop-filter: blur(10px);
+        }
+
+        /* ── Back Button ─────────────────────────────────── */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid var(--border-glass);
+            background: rgba(255, 255, 255, 0.04);
+            transition: 0.3s;
+            margin-bottom: 2.5rem;
+        }
+
+        .back-btn:hover {
+            color: white;
+            border-color: var(--primary-red);
+            background: rgba(229, 26, 36, 0.08);
+        }
+
+        /* ── Support Detail Cards ──────────────────────────── */
+        .detail-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 2.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .detail-header h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+        }
+
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .support-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 22px;
+            padding: 1.8rem;
+            transition: 0.35s;
+            position: relative;
+            overflow: hidden;
+            animation: cardFadeUp 0.4s ease-out both;
+        }
+
+        .card-link-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            display: block;
+        }
+
+        .sc-actions,
+        .subteams-box {
+            position: relative;
+            z-index: 2;
+        }
+
+        .support-card:nth-child(1) {
+            animation-delay: 0.00s;
+        }
+
+        .support-card:nth-child(2) {
+            animation-delay: 0.07s;
+        }
+
+        .support-card:nth-child(3) {
+            animation-delay: 0.14s;
+        }
+
+        .support-card:nth-child(4) {
+            animation-delay: 0.20s;
+        }
+
+        .support-card:nth-child(5) {
+            animation-delay: 0.26s;
+        }
+
+        .support-card:nth-child(n+6) {
+            animation-delay: 0.30s;
+        }
+
+        @keyframes cardFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px)
+            }
+
+            to {
+                opacity: 1;
+                transform: none
+            }
+        }
+
+        .support-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top left, rgba(229, 26, 36, 0.07) 0%, transparent 60%);
+            opacity: 0;
+            transition: 0.3s;
+        }
+
+        .support-card:hover {
+            border-color: rgba(229, 26, 36, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 16px 40px rgba(229, 26, 36, 0.1);
+        }
+
+        .support-card:hover::before {
+            opacity: 1;
+        }
+
+        .sc-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(229, 26, 36, 0.1);
+            border: 1px solid rgba(229, 26, 36, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: var(--primary-red);
+            margin-bottom: 1rem;
+        }
+
+        .sc-tag {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--primary-red);
+            background: rgba(229, 26, 36, 0.1);
+            border: 1px solid rgba(229, 26, 36, 0.2);
+            padding: 2px 10px;
+            border-radius: 50px;
+            margin-bottom: 0.7rem;
+        }
+
+        .sc-name {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.25rem;
+            font-family: var(--font-heading);
+        }
+
+        .sc-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .sc-info {
+            font-size: 0.85rem;
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1.4rem;
+            border-left: 2px solid rgba(229, 26, 36, 0.3);
+            padding-left: 0.8rem;
+        }
+
+        .sc-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .sc-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .sc-btn-primary {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 15px var(--primary-red-glow);
+        }
+
+        .sc-btn-primary:hover {
+            opacity: 0.88;
+            transform: translateY(-1px);
+        }
+
+        .sc-btn-insta {
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(220, 39, 67, 0.35);
+        }
+
+        .sc-btn-insta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 39, 67, 0.55);
+            color: white;
+        }
+
+        .sc-btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            border: 1px solid var(--border-glass);
+        }
+
+        .sc-btn-secondary:hover {
+            color: white;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .subteams-box {
+            margin-top: 1.1rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .subteams-title {
+            font-size: 0.74rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .subteams-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .subteam-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e2e8f0;
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.25s;
+        }
+
+        .subteam-chip:hover {
+            background: rgba(229, 26, 36, 0.14);
+            border-color: rgba(229, 26, 36, 0.35);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .subteam-chip i {
+            color: var(--primary-red);
+            font-size: 0.78rem;
+        }
+
+        .subteam-chip.insta:hover i {
+            color: #f43f5e;
+        }
+
+        /* ── SFI Cell Sections (Anti-Ragging, Academic, Grievance) ── */
+        .sfi-cell-section {
+            margin-bottom: 5rem;
+        }
+
+        .sfi-cell-header {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 2rem;
+            border-radius: 20px 20px 0 0;
+            margin-bottom: 0;
+            border: 1px solid rgba(229, 26, 36, 0.25);
+            border-bottom: none;
+        }
+
+        .sfi-cell-header.anti-ragging {
+            background: linear-gradient(135deg, rgba(229, 26, 36, 0.12) 0%, rgba(239, 68, 68, 0.06) 100%);
+        }
+
+        .sfi-cell-header.academic-support {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.12) 0%, rgba(96, 165, 250, 0.06) 100%);
+            border-color: rgba(59, 130, 246, 0.25);
+        }
+
+        .sfi-cell-header.grievance {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.12) 0%, rgba(192, 132, 252, 0.06) 100%);
+            border-color: rgba(168, 85, 247, 0.25);
+        }
+
+        .sfi-cell-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            flex-shrink: 0;
+        }
+
+        .sfi-cell-icon.ar {
+            background: rgba(229, 26, 36, 0.15);
+            border: 1px solid rgba(229, 26, 36, 0.3);
+            color: #ef4444;
+        }
+
+        .sfi-cell-icon.as {
+            background: rgba(59, 130, 246, 0.15);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #60a5fa;
+        }
+
+        .sfi-cell-icon.gr {
+            background: rgba(168, 85, 247, 0.15);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+        }
+
+        .sfi-cell-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            font-family: var(--font-heading);
+            margin-bottom: 4px;
+        }
+
+        .sfi-cell-motto {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-style: italic;
+            line-height: 1.5;
+        }
+
+        .sfi-cell-desc {
+            padding: 1.5rem 2rem;
+            font-size: 0.9rem;
+            color: #aaa;
+            line-height: 1.75;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(229, 26, 36, 0.15);
+            border-top: none;
+            border-bottom: none;
+        }
+
+        .sfi-cell-desc.academic-support {
+            border-color: rgba(59, 130, 246, 0.15);
+        }
+
+        .sfi-cell-desc.grievance {
+            border-color: rgba(168, 85, 247, 0.15);
+        }
+
+        .sfi-cell-contacts {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1px;
+            border: 1px solid rgba(229, 26, 36, 0.2);
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+        }
+
+        .sfi-cell-contacts.academic-support {
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .sfi-cell-contacts.grievance {
+            border-color: rgba(168, 85, 247, 0.2);
+        }
+
+        .contact-person {
+            padding: 1.2rem 1.5rem;
+            background: rgba(255, 255, 255, 0.025);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: 0.25s;
+            text-decoration: none;
+        }
+
+        .contact-person:hover {
+            background: rgba(229, 26, 36, 0.07);
+        }
+
+        .contact-person.blue:hover {
+            background: rgba(59, 130, 246, 0.07);
+        }
+
+        .contact-person.purple:hover {
+            background: rgba(168, 85, 247, 0.07);
+        }
+
+        .contact-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(229, 26, 36, 0.12);
+            border: 1px solid rgba(229, 26, 36, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            color: var(--primary-red);
+            flex-shrink: 0;
+            font-weight: 800;
+            font-family: var(--font-heading);
+        }
+
+        .contact-avatar.blue {
+            background: rgba(59, 130, 246, 0.12);
+            border-color: rgba(59, 130, 246, 0.25);
+            color: #60a5fa;
+        }
+
+        .contact-avatar.purple {
+            background: rgba(168, 85, 247, 0.12);
+            border-color: rgba(168, 85, 247, 0.25);
+            color: #c084fc;
+        }
+
+        .contact-name {
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 2px;
+        }
+
+        .contact-phone {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            letter-spacing: 0.3px;
+        }
+
+        /* ── Responsive ──────────────────────────────────── */
+        @media (max-width: 768px) {
+            .cat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cat-card {
+                height: 260px;
+            }
+
+            .support-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .support-intro h2 {
+                font-size: 1.7rem;
+            }
+
+            .sfi-cell-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .sfi-cell-contacts {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/asc_logo.jpg" alt="SFI Logo"
+                    style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="academics.html">Academics</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="scholarship.html">Scholarship</a></li>
+                <li><a href="support.html" class="active">Support</a></li>
+                <li><a href="tools.html">Tools</a></li>
+            </ul>
+            <div class="menu-toggle"><i class="fa-solid fa-bars"></i></div>
+        </div>
+    </nav>
+
+    <!-- Mobile Nav -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close"><i class="fa-solid fa-xmark"></i></div>
+        <ul class="mobile-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="academics.html">Academics</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="scholarship.html">Scholarship</a></li>
+            <li><a href="support.html" class="active">Support</a></li>
+            <li><a href="tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner">
+        <div class="container">
+            <div class="page-banner-content scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-hand-holding-hand"></i> SFI MACE INITIATIVE</span>
+                <h1>Student <span class="gradient-text">Support &amp; Welfare</span></h1>
+                <p>&ldquo;Your success at MACE is our collective responsibility.&rdquo;</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <section style="padding: 50px 0 100px;">
+        <div class="container">
+
+            <!-- ══ SFI MACE CELL SECTIONS ══════════════════════════════ -->
+
+            <!-- Anti-Ragging Cell -->
+            <div class="sfi-cell-section scroll-reveal">
+                <div class="sfi-cell-header anti-ragging">
+                    <div class="sfi-cell-icon ar"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div>
+                        <div class="sfi-cell-title">Anti-Ragging Cell &mdash; SFI MACE</div>
+                        <div class="sfi-cell-motto">Say No to Ragging. Every student deserves dignity and safety.<br>
+                            <span style="color:var(--primary-red);font-weight:700;font-style:normal;">National Helpline:
+                                1800-599-0177 (24/7 Free)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="sfi-cell-desc">
+                    The SFI MACE Anti-Ragging Cell is committed to ensuring a ragging-free campus environment. Any act
+                    of ragging &mdash; physical, verbal, or psychological &mdash; is strictly prohibited and punishable.
+                    Reach out to our representatives immediately and confidentially. All complaints are handled with
+                    strict privacy.
+                </div>
+                <div class="sfi-cell-contacts">
+                    <a href="tel:+918590960239" class="contact-person">
+                        <div class="contact-avatar">N</div>
+                        <div>
+                            <div class="contact-name">Nived</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:var(--primary-red);margin-right:4px;"></i>85909 60239
+                            </div>
+                        </div>
+                    </a>
+                    <a href="tel:+917012391364" class="contact-person">
+                        <div class="contact-avatar">F</div>
+                        <div>
+                            <div class="contact-name">Fazeem</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:var(--primary-red);margin-right:4px;"></i>70123 91364
+                            </div>
+                        </div>
+                    </a>
+                    <a href="tel:+917559000675" class="contact-person">
+                        <div class="contact-avatar">Y</div>
+                        <div>
+                            <div class="contact-name">Yesaswi</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:var(--primary-red);margin-right:4px;"></i>75590 00675
+                            </div>
+                        </div>
+                    </a>
+                    <a href="tel:+916282112432" class="contact-person">
+                        <div class="contact-avatar">S</div>
+                        <div>
+                            <div class="contact-name">Sangeeth</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:var(--primary-red);margin-right:4px;"></i>6282 112
+                                432</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Academic Support Cell -->
+            <div class="sfi-cell-section scroll-reveal">
+                <div class="sfi-cell-header academic-support" style="border-color:rgba(59,130,246,0.25);">
+                    <div class="sfi-cell-icon as"><i class="fa-solid fa-book-open-reader"></i></div>
+                    <div>
+                        <div class="sfi-cell-title" style="color:white;">Academic Support Cell &mdash; SFI MACE</div>
+                        <div class="sfi-cell-motto">Together, We Learn. Together, We Grow.</div>
+                    </div>
+                </div>
+                <div class="sfi-cell-desc academic-support">
+                    Our Academic Support Cell strives to build a collaborative space where students can share knowledge,
+                    exchange resources, clear doubts, and support each other through academic challenges. Reach out to
+                    our representatives for study help, notes, or academic guidance.
+                </div>
+                <div class="sfi-cell-contacts academic-support">
+                    <a href="tel:+917306053493" class="contact-person blue">
+                        <div class="contact-avatar blue">G</div>
+                        <div>
+                            <div class="contact-name">Gokul S Kumar</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:#60a5fa;margin-right:4px;"></i>73060 53493</div>
+                        </div>
+                    </a>
+                    <a href="tel:+918075976885" class="contact-person blue">
+                        <div class="contact-avatar blue">M</div>
+                        <div>
+                            <div class="contact-name">Megha Ranjith</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:#60a5fa;margin-right:4px;"></i>80759 76885</div>
+                        </div>
+                    </a>
+                    <a href="tel:+917012299354" class="contact-person blue">
+                        <div class="contact-avatar blue">A</div>
+                        <div>
+                            <div class="contact-name">Ajin Reji</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:#60a5fa;margin-right:4px;"></i>70122 99354</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Grievance Cell -->
+            <div class="sfi-cell-section scroll-reveal">
+                <div class="sfi-cell-header grievance" style="border-color:rgba(168,85,247,0.25);">
+                    <div class="sfi-cell-icon gr"><i class="fa-solid fa-scale-balanced"></i></div>
+                    <div>
+                        <div class="sfi-cell-title" style="color:white;">Grievance Cell &mdash; SFI MACE</div>
+                        <div class="sfi-cell-motto">Together, We Speak. Together, We Make a Difference.</div>
+                    </div>
+                </div>
+                <div class="sfi-cell-desc grievance" style="border-color:rgba(168,85,247,0.15);">
+                    Our Grievance Cell aims to create a safe and accessible platform where students can express their
+                    concerns, seek support, and address issues that affect their academic and campus life. All
+                    grievances are handled with complete confidentiality and sensitivity.
+                </div>
+                <div class="sfi-cell-contacts grievance" style="border-color:rgba(168,85,247,0.2);">
+                    <a href="tel:+918590706270" class="contact-person purple">
+                        <div class="contact-avatar purple">K</div>
+                        <div>
+                            <div class="contact-name">Karthik VS</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:#c084fc;margin-right:4px;"></i>85907 06270</div>
+                        </div>
+                    </a>
+                    <a href="tel:+916235732300" class="contact-person purple">
+                        <div class="contact-avatar purple">A</div>
+                        <div>
+                            <div class="contact-name">Arsha S Kumar</div>
+                            <div class="contact-phone"><i class="fa-solid fa-phone"
+                                    style="font-size:0.65rem;color:#c084fc;margin-right:4px;"></i>62357 32300</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- ══ CLUBS & TECH COMMUNITIES ════════════════════════════ -->
+            <div id="support-selection">
+                <div class="support-intro scroll-reveal">
+                    <h2>Clubs &amp; <span class="red-text">Communities</span></h2>
+                    <p>Explore MACE's vibrant student clubs, tech communities, and professional bodies.</p>
+                </div>
+
+                <div class="cat-grid">
+                    <!-- Tech & Professional -->
+                    <div class="cat-card" onclick="showCategory('Tech & Professional')" id="cat-tech">
+                        <div class="cat-bg"
+                            style="background-image:url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=900');">
+                        </div>
+                        <div class="cat-overlay"></div>
+                        <span class="cat-count">8 Bodies</span>
+                        <div class="cat-content">
+                            <div class="cat-icon"><i class="fa-solid fa-microchip"></i></div>
+                            <h3>Tech &amp; Professional Bodies</h3>
+                            <p>IEEE, ISTE, ASME, ASCE, ENCIDE, SAE, DSC &amp; more.</p>
+                            <span class="cat-btn">Explore <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Cultural & Arts -->
+                    <div class="cat-card" onclick="showCategory('Cultural & Arts')" id="cat-cultural">
+                        <div class="cat-bg"
+                            style="background-image:url('https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=900');">
+                        </div>
+                        <div class="cat-overlay"></div>
+                        <span class="cat-count">6 Clubs</span>
+                        <div class="cat-content">
+                            <div class="cat-icon"><i class="fa-solid fa-masks-theater"></i></div>
+                            <h3>Cultural &amp; Arts Clubs</h3>
+                            <p>SANSKRITI, Music Club, Dance Club, Film Society, Literary &amp; Debating, TAKSHAK.</p>
+                            <span class="cat-btn">Explore <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Innovation & Entrepreneurship -->
+                    <div class="cat-card" onclick="showCategory('Innovation & Entrepreneurship')" id="cat-innovation">
+                        <div class="cat-bg"
+                            style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=900');">
+                        </div>
+                        <div class="cat-overlay"></div>
+                        <span class="cat-count">4 Cells</span>
+                        <div class="cat-content">
+                            <div class="cat-icon"><i class="fa-solid fa-lightbulb"></i></div>
+                            <h3>Innovation &amp; Entrepreneurship</h3>
+                            <p>IEDC, AICTE IDEA Lab, IoT Lab, FAB Lab — build and launch your ideas.</p>
+                            <span class="cat-btn">Explore <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                    <!-- Social & Sports -->
+                    <div class="cat-card" onclick="showCategory('Social & Sports')" id="cat-social">
+                        <div class="cat-bg"
+                            style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?q=80&w=900');">
+                        </div>
+                        <div class="cat-overlay"></div>
+                        <span class="cat-count">4 Groups</span>
+                        <div class="cat-content">
+                            <div class="cat-icon"><i class="fa-solid fa-people-group"></i></div>
+                            <h3>Social &amp; Sports</h3>
+                            <p>NSS, Quiz Club, MACE MUN, Athletics &amp; Sports Teams.</p>
+                            <span class="cat-btn">Explore <i class="fa-solid fa-arrow-right"></i></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Detail View (hidden by default) -->
+            <div id="support-detail" style="display:none;">
+                <div class="back-btn" onclick="goBack()">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Clubs &amp; Communities
+                </div>
+                <div class="detail-header">
+                    <h2 id="detail-title" class="scroll-reveal">
+                        <span class="red-text" id="detail-title-text"></span>
+                    </h2>
+                </div>
+                <div class="support-grid" id="support-grid"></div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand scroll-reveal">
+                    <div class="footer-brand-title">
+                        <img src="images/asc_logo.jpg" alt="SFI Logo"
+                            style="width:48px;height:48px;object-fit:contain;border-radius:8px;flex-shrink:0;">
+                        <h2 style="font-size:1.25rem;">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                    </div>
+                    <p>An initiative by SFI MACE Unit. Streamlining resources to guide student wellness and professional
+                        goals.</p>
+                    <div class="footer-socials">
+                        <a href="https://www.instagram.com/sfi_mace" target="_blank" class="social-icon"><i
+                                class="fa-brands fa-instagram"></i></a>
+                        <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank"
+                            class="social-icon"><i class="fa-brands fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                <div class="footer-contact scroll-reveal">
+                    <h3>Contact Us</h3>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>Mar Athanasius College of Engineering, Kothamangalam, Kerala &mdash; 686 666</span>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>0485-2212200</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/canvas-bg.js"></script>
+
+    <script>
+        /* ── Clubs Data (from mace.ac.in & official communities) ── */
+        var SUPPORT_DATA = {
+            'Tech & Professional': [
+                {
+                    icon: 'fa-microchip',
+                    tag: 'IEEE',
+                    name: 'IEEE SB MACE',
+                    sub: 'Student Branch',
+                    info: 'Professional development, technical talks, paper presentations & global networking through IEEE. One of MACE\'s most active technical bodies.',
+                    link: 'https://www.instagram.com/ieeemace?exln=MWtoM2I0ZGU0c2l3MQ==',
+                    insta: 'https://www.instagram.com/ieeemace?exln=MWtoM2I0ZGU0c2l3MQ=='
+                },
+                {
+                    icon: 'fa-industry',
+                    tag: 'ISTE',
+                    name: 'ISTE MACE',
+                    sub: 'Indian Society for Technical Education',
+                    info: 'Promotes technical education, hosts seminars, workshops, and student chapter activities aligned with industry needs.',
+                    link: 'https://www.instagram.com/istemace?rpxt=Ymt0bTMwbzAzem5h',
+                    insta: 'https://www.instagram.com/istemace?rpxt=Ymt0bTMwbzAzem5h'
+                },
+                {
+                    icon: 'fa-gears',
+                    tag: 'ASME',
+                    name: 'ASME MACE',
+                    sub: 'American Society of Mechanical Engineers',
+                    info: 'Mechanical engineering community organizing design challenges, technical competitions and industry interactions.',
+                    link: 'https://www.instagram.com/asme_mace?mdxt=d3pkMHZ0NjdyZDAz',
+                    insta: 'https://www.instagram.com/asme_mace?mdxt=d3pkMHZ0NjdyZDAz'
+                },
+                {
+                    icon: 'fa-building-columns',
+                    tag: 'ASCE',
+                    name: 'ASCE MACE',
+                    sub: 'American Society of Civil Engineers',
+                    info: 'Civil engineering student chapter conducting projects, site visits, and competitions for CE students.',
+                    link: 'https://www.instagram.com/asce.mace?mdxt=N2twbGJ1bWI1ZHEx',
+                    insta: 'https://www.instagram.com/asce.mace?mdxt=N2twbGJ1bWI1ZHEx'
+                },
+                {
+                    icon: 'fa-bolt',
+                    tag: 'ENCIDE',
+                    name: 'ENCIDE MACE',
+                    sub: 'Electronics Community',
+                    info: 'Electronics & communication engineering community with hands-on project sessions, workshops and hackathons.',
+                    link: 'https://www.instagram.com/encide_official?vrfl=MXRmMHc2NHRvbXlrcA==',
+                    insta: 'https://www.instagram.com/encide_official?vrfl=MXRmMHc2NHRvbXlrcA=='
+                },
+                {
+                    icon: 'fa-car',
+                    tag: 'SAE',
+                    name: 'SAE MACE',
+                    sub: 'Society of Automotive Engineers',
+                    info: 'Automotive engineering student club involved in competitions, technical workshops, and industry connects.',
+                    link: 'https://www.instagram.com/saemace_official?rpxt=MWZqZm4xb2NxejhrMw==',
+                    insta: 'https://www.instagram.com/saemace_official?rpxt=MWZqZm4xb2NxejhrMw=='
+                },
+                {
+                    icon: 'fa-code',
+                    tag: 'DSC & TinkerHub',
+                    name: 'Developer Students Club',
+                    sub: 'DSC & TinkerHub MACE',
+                    info: 'Coding, open source, app development and cloud technologies community combining Developer Students Club and TinkerHub MACE chapters.',
+                    link: 'https://www.instagram.com/dsc_mace?cplk=azV1b3pmdWtlNTJz==',
+                    insta: 'https://www.instagram.com/dsc_mace?cplk=azV1b3pmdWtlNTJz==',
+                    subTeams: [
+                        { name: 'DSC MACE', icon: 'fa-laptop-code', url: 'https://www.instagram.com/dsc_mace?cplk=azV1b3pmdWtlNTJz==' },
+                        { name: 'TinkerHub MACE', icon: 'fa-code-branch', url: 'https://www.instagram.com/tinkerhub.mace?vrfl=MXIyNzhtZm92YnMydg==' }
+                    ]
+                },
+                {
+                    icon: 'fa-network-wired',
+                    tag: 'Networking',
+                    name: 'MACE NetX Club',
+                    sub: 'Networking & Cybersecurity',
+                    info: 'Computer networking, cybersecurity, and systems club. Learn ethical hacking, networking protocols, and cloud tech.',
+                    link: 'https://www.instagram.com/netxmace?vrfl=MWVvNjB6bHJwM3hpbw==',
+                    insta: 'https://www.instagram.com/netxmace?vrfl=MWVvNjB6bHJwM3hpbw=='
+                }
+            ],
+            'Cultural & Arts': [
+                {
+                    icon: 'fa-masks-theater',
+                    tag: 'Cultural',
+                    name: 'SANSKRITI',
+                    sub: 'Cultural Club',
+                    info: 'MACE\'s flagship cultural club organizing fests, inter-college competitions, drama, and arts celebrations throughout the year.',
+                    link: 'https://www.instagram.com/sanskriti.mace?obrf=d3JjajMzc3pob2Nv',
+                    insta: 'https://www.instagram.com/sanskriti.mace?obrf=d3JjajMzc3pob2Nv'
+                },
+                {
+                    icon: 'fa-music',
+                    tag: 'Music',
+                    name: 'MACE Music Club',
+                    sub: 'MACE Music Community',
+                    info: 'For all music lovers — vocalists and instrumentalists. Hosts jam sessions, college fests performances, and open mics.',
+                    link: 'https://www.instagram.com/mace_music_club?exln=MWppMmFvcGNuMzducA==',
+                    insta: 'https://www.instagram.com/mace_music_club?exln=MWppMmFvcGNuMzducA=='
+                },
+                {
+                    icon: 'fa-person-dancing',
+                    tag: 'Dance',
+                    name: 'MACE Dance Club',
+                    sub: 'MACE Dance Community',
+                    info: 'From classical to contemporary — the dance club of MACE brings together performers of all styles.',
+                    link: 'https://www.instagram.com/mace_dance_club?srtk=cHJkc2g4OHp3ZWgw',
+                    insta: 'https://www.instagram.com/mace_dance_club?srtk=cHJkc2g4OHp3ZWgw'
+                },
+                {
+                    icon: 'fa-film',
+                    tag: 'Cinema',
+                    name: 'MACE Film Society',
+                    sub: 'Campus Cinephiles',
+                    info: 'Film screenings, reviews, filmmaking workshops, and short film productions by MACE students.',
+                    link: 'https://www.instagram.com/macefilmsociety?cplk=azlzOTI2NmpuNnBy',
+                    insta: 'https://www.instagram.com/macefilmsociety?cplk=azlzOTI2NmpuNnBy'
+                },
+                {
+                    icon: 'fa-book',
+                    tag: 'Literature',
+                    name: 'MACE Debate Club',
+                    sub: 'Public Speaking & Writing',
+                    info: 'Debates, elocutions, creative writing, and MUN-style events to sharpen communication and critical thinking.',
+                    link: 'https://www.instagram.com/mace_debate_club?psln=djFraWIzZWt3ZnF2',
+                    insta: 'https://www.instagram.com/mace_debate_club?psln=djFraWIzZWt3ZnF2'
+                },
+                {
+                    icon: 'fa-star',
+                    tag: 'Annual Fest',
+                    name: 'TAKSHAK',
+                    sub: 'National Techno-Cultural Fest',
+                    info: 'MACE\'s premier annual national-level techno-cultural festival attracting students from across India for competitions, workshops, and exhibitions.',
+                    link: 'https://www.instagram.com/takshak.26?mdxt=Z2l3b2dvbG10NTRm',
+                    insta: 'https://www.instagram.com/takshak.26?mdxt=Z2l3b2dvbG10NTRm'
+                }
+            ],
+            'Innovation & Entrepreneurship': [
+                {
+                    icon: 'fa-lightbulb',
+                    tag: 'Innovation',
+                    name: 'IEDC MACE',
+                    sub: 'Innovation & Entrepreneurship Development Cell',
+                    info: 'Startup incubation, funding guidance, mentor connects and bootcamps to turn student ideas into real ventures.',
+                    link: 'https://www.instagram.com/iedcmace?obrf=MXN2aTZlaDVzbDNseA==',
+                    insta: 'https://www.instagram.com/iedcmace?obrf=MXN2aTZlaDVzbDNseA=='
+                },
+                {
+                    icon: 'fa-wifi',
+                    tag: 'IoT',
+                    name: 'MACE IoT Club',
+                    sub: 'Internet of Things Community',
+                    info: 'Equipped lab and student community for IoT project development with sensors, microcontrollers, cloud platforms, and real-world deployments.',
+                    link: 'https://www.instagram.com/maceiotclub?mdxt=czE1bWs1ZnowdHJj',
+                    insta: 'https://www.instagram.com/maceiotclub?mdxt=czE1bWs1ZnowdHJj'
+                },
+                {
+                    icon: 'fa-wrench',
+                    tag: 'Fabrication',
+                    name: 'FabLab MACE',
+                    sub: 'Digital Fabrication Lab',
+                    info: 'Advanced fabrication facility with laser cutters, CNC machines, and maker tools for hardware project prototyping.',
+                    link: 'https://www.instagram.com/fablabmace?mdxt=dTRiM2Fzam1mcTY0',
+                    insta: 'https://www.instagram.com/fablabmace?mdxt=dTRiM2Fzam1mcTY0'
+                },
+                {
+                    icon: 'fa-flask',
+                    tag: 'AICTE',
+                    name: 'AICTE IDEA Lab',
+                    sub: 'Hands-On Making & Prototyping',
+                    info: 'State-of-the-art fabrication lab for 3D printing, PCB design, IoT prototyping, and rapid product development.',
+                    link: 'https://mace.ac.in/on-campus/aicte-idea-lab',
+                    insta: null
+                }
+            ],
+            'Social & Sports': [
+                {
+                    icon: 'fa-hand-holding-heart',
+                    tag: 'Service',
+                    name: 'NSS MACE',
+                    sub: 'National Service Scheme',
+                    info: 'Social service, community development, and national camps. NSS MACE leads impactful outreach programs across Kothamangalam.',
+                    link: 'https://www.instagram.com/nss.mace?dlrf=eHNoaXFkejVrdGJl',
+                    insta: 'https://www.instagram.com/nss.mace?dlrf=eHNoaXFkejVrdGJl'
+                },
+                {
+                    icon: 'fa-question',
+                    tag: 'Quiz',
+                    name: 'MACE Quiz Club',
+                    sub: 'Knowledge & Trivia',
+                    info: 'Inter-college and intra-college quiz competitions covering science, technology, current affairs, and general knowledge.',
+                    link: 'https://www.instagram.com/macequizclub?srtk=ZnU3bW1wOHF1NGsx',
+                    insta: 'https://www.instagram.com/macequizclub?srtk=ZnU3bW1wOHF1NGsx'
+                },
+                {
+                    icon: 'fa-globe',
+                    tag: 'MUN',
+                    name: 'MACE MUN',
+                    sub: 'Model United Nations',
+                    info: 'Debates on global issues, diplomacy, and international relations. Excellent for developing leadership and public speaking skills.',
+                    link: 'https://www.instagram.com/macemun_26?obrf=MXV6MXF2MmQ5ZWNyeg==',
+                    insta: 'https://www.instagram.com/macemun_26?obrf=MXV6MXF2MmQ5ZWNyeg=='
+                },
+                {
+                    icon: 'fa-person-running',
+                    tag: 'Sports & Athletics',
+                    name: 'Athletics Club MACE',
+                    sub: 'Athletics & College Sports Teams',
+                    info: 'Represents MACE in collegiate athletics, track & field, and university tournaments. Covers official college sports teams in Football, Basketball, Cricket, and Skate Club.',
+                    link: 'https://www.instagram.com/athleticsclubmace?obrf=MTB4eWVzMTgxZWhqNQ==',
+                    insta: 'https://www.instagram.com/athleticsclubmace?obrf=MTB4eWVzMTgxZWhqNQ==',
+                    subTeams: [
+                        { name: 'Athletics Club', icon: 'fa-person-running', url: 'https://www.instagram.com/athleticsclubmace?obrf=MTB4eWVzMTgxZWhqNQ==' },
+                        { name: 'Football Team', icon: 'fa-futbol', url: 'https://www.instagram.com/mace_footballteam?rpxt=Zmg4Ymd1djUwaGY2' },
+                        { name: 'Basketball Team', icon: 'fa-basketball', url: 'https://www.instagram.com/mace.basketball_?exln=MW95MnUzMGwya3hmdQ==' },
+                        { name: 'Cricket Team', icon: 'fa-baseball-bat-ball', url: 'https://www.instagram.com/mace_cricket_team?rpxt=emM4ZWFpbjVrN2lr' },
+                        { name: 'Skate Club', icon: 'fa-person-skating', url: 'https://www.instagram.com/mace_skate_club?rpxt=MTVrZjN2dGdvNWp0aw==' }
+                    ]
+                }
+            ]
+        };
+
+        /* ── View Control ── */
+        function showCategory(cat) {
+            var data = SUPPORT_DATA[cat];
+            var grid = document.getElementById('support-grid');
+            var title = document.getElementById('detail-title-text');
+            title.textContent = cat;
+            grid.innerHTML = data.map(function (d) {
+                var targetUrl = d.insta || d.link;
+                var isInsta = Boolean(d.insta || (targetUrl && targetUrl.indexOf('instagram.com') !== -1));
+                var btnIcon = isInsta ? '<i class="fa-brands fa-instagram"></i>' : '<i class="fa-solid fa-arrow-up-right-from-square"></i>';
+                var btnText = isInsta ? 'Visit Instagram' : 'Visit Page';
+                var btnClass = isInsta ? 'sc-btn sc-btn-insta' : 'sc-btn sc-btn-primary';
+
+                var actions = '<a href="' + targetUrl + '" target="_blank" rel="noopener noreferrer" class="' + btnClass + '" onclick="event.stopPropagation()">'
+                    + btnIcon + ' ' + btnText + '</a>';
+
+                var subteamsHtml = '';
+                if (d.subTeams && d.subTeams.length) {
+                    subteamsHtml = '<div class="subteams-box">'
+                        + '<div class="subteams-title"><i class="fa-solid fa-medal" style="color:var(--primary-red);"></i> Teams &amp; Communities:</div>'
+                        + '<div class="subteams-grid">'
+                        + d.subTeams.map(function (st) {
+                            return '<a href="' + st.url + '" target="_blank" rel="noopener noreferrer" class="subteam-chip insta">'
+                                + '<i class="fa-solid ' + st.icon + '"></i> ' + st.name
+                                + ' <i class="fa-brands fa-instagram" style="font-size:0.75rem;margin-left:3px;color:#f43f5e;"></i></a>';
+                        }).join('')
+                        + '</div></div>';
+                }
+                return '<div class="support-card">'
+                    + '<a href="' + targetUrl + '" target="_blank" rel="noopener noreferrer" class="card-link-overlay" aria-label="' + d.name + '"></a>'
+                    + '<div class="sc-icon"><i class="fa-solid ' + d.icon + '"></i></div>'
+                    + '<span class="sc-tag">' + d.tag + '</span>'
+                    + '<div class="sc-name">' + d.name + '</div>'
+                    + '<div class="sc-sub">' + d.sub + '</div>'
+                    + '<div class="sc-info">' + d.info + '</div>'
+                    + '<div class="sc-actions">' + actions + '</div>'
+                    + subteamsHtml
+                    + '</div>';
+            }).join('');
+            document.getElementById('support-selection').style.display = 'none';
+            document.getElementById('support-detail').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goBack() {
+            document.getElementById('support-detail').style.display = 'none';
+            document.getElementById('support-selection').style.display = 'block';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+
+</html>

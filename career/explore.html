@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="../images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Path Explorer | MACE Academic Support Cell</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        .wizard-container {
+            max-width: 800px;
+            margin: 60px auto 80px;
+            width: 95%;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 3rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            text-align: left;
+        }
+        .wizard-header { margin-bottom: 2rem; text-align: center; }
+        .wizard-header h1 { font-size: 2.2rem; color: white; margin-bottom: 10px; font-weight: 800; }
+        .wizard-header p { color: var(--text-muted); font-size: 1rem; }
+        
+        /* Progress Bar */
+        .progress-wrapper { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; margin-bottom: 3rem; overflow: hidden; }
+        .progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary-red), #ff4d4d); width: 16.6%; transition: width 0.4s ease; }
+
+        /* Steps */
+        .step { display: none; animation: fadeInRight 0.5s ease forwards; }
+        .step.active { display: block; }
+        @keyframes fadeInRight { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+        .step-title { font-size: 1.4rem; color: white; margin-bottom: 1.5rem; border-left: 3px solid var(--primary-red); padding-left: 15px; font-weight: 700; }
+
+        /* Options Grid */
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+        .option-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 15px 20px; border-radius: 12px; cursor: pointer; color: #ddd; font-weight: 500; transition: 0.3s; display: flex; align-items: center; justify-content: space-between; }
+        .option-card:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.3); transform: translateY(-2px); }
+        .option-card.selected { background: rgba(229, 26, 36, 0.15); border-color: var(--primary-red); color: white; box-shadow: 0 5px 15px rgba(229, 26, 36, 0.2); }
+        .option-card i { font-size: 1.1rem; color: var(--primary-red); display: none; }
+        .option-card.selected i { display: inline-block; }
+
+        /* Actions */
+        .wizard-actions { margin-top: 3rem; display: flex; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; }
+        
+        /* Calculating */
+        #calculating-state { display: none; text-align: center; padding: 4rem 0; flex-direction: column; align-items: center; justify-content: center; }
+
+        /* Results */
+        #results-section { display: none; margin-top: 40px; margin-bottom: 80px; }
+        .explorer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        
+        /* Course Card */
+        .course-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 15px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
+        .course-card:hover { transform: translateY(-5px); border-color: var(--primary-red); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .course-img-wrap { height: 160px; position: relative; overflow: hidden; }
+        .course-img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .course-card:hover .course-img { transform: scale(1.1); }
+        .course-content { padding: 20px; flex: 1; display: flex; flex-direction: column; text-align: left; }
+        .course-title { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 8px; }
+        .course-meta { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+        
+        /* Logo Anim */
+        .logo-anim-wrap { position: relative; width: 120px; height: 120px; margin-bottom: 30px; display: flex; align-items: center; justify-content: center; }
+        .calc-logo { width: 60px; height: 60px; object-fit: contain; z-index: 2; animation: logoPulse 2s ease-in-out infinite; background: var(--primary-red); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: white; font-family: var(--font-heading); font-weight: 900;}
+        .logo-glow { position: absolute; width: 100px; height: 100px; background: radial-gradient(circle, var(--primary-red) 0%, transparent 70%); border-radius: 50%; z-index: 1; opacity: 0.5; animation: glowPulse 2s ease-in-out infinite; }
+        @keyframes logoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes glowPulse { 0%, 100% { transform: scale(0.8); opacity: 0.3; } 50% { transform: scale(1.3); opacity: 0.6; } }
+
+        /* Modal */
+        #course-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #121212; border: 1px solid var(--border-glass); border-radius: 20px; width: 100%; max-width: 650px; display: flex; flex-direction: column; overflow: hidden; position: relative; max-height: 90vh; }
+        .modal-img { height: 250px; background-size: cover; background-position: center; position: relative; }
+        .modal-details { padding: 30px; overflow-y: auto; text-align: left; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .modal-title { font-size: 1.6rem; color: white; margin-bottom: 10px; font-weight: 800; }
+        .modal-desc { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+        .modal-action { display: block; background: var(--primary-red); color: white; padding: 15px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: 700; transition: 0.3s; }
+        .modal-action:hover { transform: translateY(-3px); box-shadow: 0 5px 20px var(--primary-red-glow); }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../academics.html">Academics</a></li>
+                <li><a href="../notes.html">Notes</a></li>
+                <li><a href="../career.html" class="active">Career</a></li>
+                <li><a href="../scholarship.html">Scholarship</a></li>
+                <li><a href="../support.html">Support</a></li>
+                <li><a href="../tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../academics.html">Academics</a></li>
+            <li><a href="../notes.html">Notes</a></li>
+            <li><a href="../career.html" class="active">Career</a></li>
+            <li><a href="../scholarship.html">Scholarship</a></li>
+            <li><a href="../support.html">Support</a></li>
+            <li><a href="../tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner" style="padding: 140px 0 40px 0;">
+        <div class="container" style="text-align: center;">
+            <div class="page-banner-content scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-compass"></i> GUIDANCE WIZARD</span>
+                <h1>Career Path <span class="gradient-text">Explorer</span></h1>
+                <p>Find the perfect master's specialization tailored to your branch and goals.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Wizard Wrapper -->
+    <main class="container">
+        <div class="wizard-container" id="wizard-container">
+            <div class="wizard-header" id="wizard-header">
+                <h2 style="color: white; font-size: 1.8rem; margin-bottom: 5px; font-weight: 800;">Academic Compass</h2>
+                <p>Browse PG programs and specialization roadmaps matching your engineering profile</p>
+            </div>
+
+            <div class="progress-wrapper" id="progress-wrapper">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+
+            <div id="steps-container">
+                <!-- Step 1: Branch -->
+                <div class="step active" id="step-0">
+                    <h2 class="step-title">What is your current branch/degree?</h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="CSE" onclick="selectSingle(this, 0)"><span>Computer Science & Engineering (CSE)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="ECE" onclick="selectSingle(this, 0)"><span>Electronics & Communication (ECE)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="EEE" onclick="selectSingle(this, 0)"><span>Electrical & Electronics (EEE)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="ME" onclick="selectSingle(this, 0)"><span>Mechanical Engineering (ME)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="CE" onclick="selectSingle(this, 0)"><span>Civil Engineering (CE)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="AE" onclick="selectSingle(this, 0)"><span>Applied Electronics & Inst. (AEI)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="IE" onclick="selectSingle(this, 0)"><span>Industrial Engineering (IE)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="ARCHI" onclick="selectSingle(this, 0)"><span>Architecture (B.Arch)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="EL" onclick="selectSingle(this, 0)"><span>Electronics & Computer Eng. (EL)</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Interests -->
+                <div class="step" id="step-1">
+                    <h2 class="step-title">What are your areas of interest? <span style="font-size:0.8rem; color:#888;">(Multiple)</span></h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="Data Science" onclick="toggleOption(this, 1)"><span>Data Science</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="AI / Machine Learning" onclick="toggleOption(this, 1)"><span>AI / Machine Learning</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Web Development" onclick="toggleOption(this, 1)"><span>Web Development</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Core Engineering" onclick="toggleOption(this, 1)"><span>Core Engineering</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="UI/UX Design" onclick="toggleOption(this, 1)"><span>UI/UX Design</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Finance" onclick="toggleOption(this, 1)"><span>Finance</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Management" onclick="toggleOption(this, 1)"><span>Management</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Research" onclick="toggleOption(this, 1)"><span>Research</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Cybersecurity" onclick="toggleOption(this, 1)"><span>Cybersecurity</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Robotics / IoT" onclick="toggleOption(this, 1)"><span>Robotics / IoT</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Goals -->
+                <div class="step" id="step-2">
+                    <h2 class="step-title">What is your primary career goal?</h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="Industry Job" onclick="selectSingle(this, 2)"><span>Industry Job</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Research & Innovation" onclick="selectSingle(this, 2)"><span>Research & Innovation</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Entrepreneurship" onclick="selectSingle(this, 2)"><span>Entrepreneurship / Startups</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Management & Leadership" onclick="selectSingle(this, 2)"><span>Management & Leadership</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Government Sector" onclick="selectSingle(this, 2)"><span>Government Sector</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Consulting" onclick="selectSingle(this, 2)"><span>Consulting</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Destination -->
+                <div class="step" id="step-3">
+                    <h2 class="step-title">Preferred Study Destination?</h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="Both" onclick="selectSingle(this, 3)"><span>No Preference (India & Abroad)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="India" onclick="selectSingle(this, 3)"><span>India Only</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="Abroad" onclick="selectSingle(this, 3)"><span>Abroad Only</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <!-- Step 5: Degree Type -->
+                <div class="step" id="step-4">
+                    <h2 class="step-title">What type of degree are you aiming for? <span style="font-size:0.8rem; color:#888;">(Multiple)</span></h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="MTech" onclick="toggleOption(this, 4)"><span>MTech</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="MS" onclick="toggleOption(this, 4)"><span>MS (Master of Science)</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="MBA" onclick="toggleOption(this, 4)"><span>MBA</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="MDes" onclick="toggleOption(this, 4)"><span>MDes / MArch</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="PhD" onclick="toggleOption(this, 4)"><span>PhD</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="PG Diploma" onclick="toggleOption(this, 4)"><span>PG Diploma / Cert</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Exams -->
+                <div class="step" id="step-5">
+                    <h2 class="step-title">Which entrance exams are you considering? <span style="font-size:0.8rem; color:#888;">(Multiple)</span></h2>
+                    <div class="options-grid">
+                        <div class="option-card" data-val="GATE" onclick="toggleOption(this, 5)"><span>GATE</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="GRE" onclick="toggleOption(this, 5)"><span>GRE</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="CAT" onclick="toggleOption(this, 5)"><span>CAT / MAT</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="IELTS" onclick="toggleOption(this, 5)"><span>IELTS / TOEFL</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="JEST" onclick="toggleOption(this, 5)"><span>JEST / CSIR-NET</span> <i class="fa-solid fa-circle-check"></i></div>
+                        <div class="option-card" data-val="CEED" onclick="toggleOption(this, 5)"><span>CEED / NATA</span> <i class="fa-solid fa-circle-check"></i></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wizard Actions -->
+            <div class="wizard-actions" id="wizard-actions">
+                <button class="btn btn-secondary" id="btn-prev" onclick="prevStep()" style="visibility:hidden;">Previous</button>
+                <button class="btn btn-primary" id="btn-next" onclick="nextStep()" disabled>Next <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+
+            <!-- Calculating State -->
+            <div id="calculating-state">
+                <div class="logo-anim-wrap">
+                    <div class="logo-glow"></div>
+                    <div class="calc-logo">M</div>
+                </div>
+                <h2 style="color:white; font-size:1.8rem; font-weight:800; margin-bottom:10px;">Finding Your Best Path...</h2>
+                <p style="color: var(--text-muted);">Analyzing courses and matching against your profile</p>
+            </div>
+        </div>
+            
+        <div id="results-section">
+            <h2 style="color: white; border-left: 4px solid var(--primary-red); padding-left: 15px; margin-bottom: 2rem; font-weight:800;">Recommended Career Paths</h2>
+            
+            <div id="results-container" class="explorer-grid" style="margin-bottom: 50px;"></div>
+            
+            <h2 style="color: white; border-left: 4px solid var(--primary-red); padding-left: 15px; margin-bottom: 2rem; font-weight:800;">Relevant Entrance Exams</h2>
+            <div id="exams-container" style="display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 40px;"></div>
+            
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-secondary" onclick="resetWizard()"><i class="fa-solid fa-rotate-right" style="margin-right:6px;"></i> Search Again</button>
+                <a href="higher-education.html" class="btn btn-primary" style="text-decoration:none; margin-left:15px;">Browse Category Folders</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="course-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-img" id="modal-img"></div>
+            <div class="modal-details">
+                <h2 class="modal-title" id="modal-title">Program Title</h2>
+                <div class="modal-desc" id="modal-desc">Description</div>
+                <a href="#" target="_blank" class="modal-action" id="modal-link">Learn More & Apply</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glass Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>© SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/canvas-bg.js"></script>
+    <script src="../js/storage.js"></script>
+    
+    <script>
+        let allCourses = [];
+        
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.SFI_STORAGE && window.SFI_STORAGE.fetchLiveR2Data) {
+                await window.SFI_STORAGE.fetchLiveR2Data();
+            }
+
+            const data = window.SFI_STORAGE.getData();
+            if (data && data.higher_education) {
+                const catNameMap = {};
+                for (let folderId in data.higher_education) {
+                    const f = data.higher_education[folderId];
+                    if (f.categories && Array.isArray(f.categories)) {
+                        f.categories.forEach(c => catNameMap[c.id] = c.name);
+                    }
+                }
+                
+                for (let catId in data.higher_education) {
+                    if (catId === 'root') continue;
+                    const catObj = data.higher_education[catId];
+                    if (catObj.courses && Array.isArray(catObj.courses)) {
+                        catObj.courses.forEach(crs => {
+                            allCourses.push({
+                                ...crs,
+                                parentCategoryName: catNameMap[catId] || "Specialization"
+                            });
+                        });
+                    }
+                }
+            }
+        });
+
+        let currentStep = 0;
+        const totalSteps = 6;
+
+        function updateProgress() {
+            const progress = ((currentStep + 1) / totalSteps) * 100;
+            document.getElementById('progress-bar').style.width = progress + '%';
+        }
+
+        function toggleOption(element, stepIndex) {
+            element.classList.toggle('selected');
+            checkNextButton(stepIndex);
+        }
+
+        function selectSingle(element, stepIndex) {
+            const container = document.getElementById(`step-${stepIndex}`);
+            const options = container.querySelectorAll('.option-card');
+            options.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            checkNextButton(stepIndex);
+        }
+
+        function checkNextButton(stepIndex) {
+            const container = document.getElementById(`step-${stepIndex}`);
+            const selected = container.querySelectorAll('.option-card.selected');
+            
+            if (stepIndex === 4 || stepIndex === 5) {
+                document.getElementById('btn-next').disabled = false;
+            } else {
+                document.getElementById('btn-next').disabled = selected.length === 0;
+            }
+        }
+
+        function nextStep() {
+            if (currentStep < totalSteps - 1) {
+                document.getElementById(`step-${currentStep}`).classList.remove('active');
+                currentStep++;
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+                
+                document.getElementById('btn-prev').style.visibility = 'visible';
+                checkNextButton(currentStep);
+                updateProgress();
+                
+                if (currentStep === totalSteps - 1) {
+                    document.getElementById('btn-next').innerHTML = 'Calculate <i class="fa-solid fa-wand-magic-sparkles"></i>';
+                }
+            } else {
+                runExplorer();
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 0) {
+                document.getElementById(`step-${currentStep}`).classList.remove('active');
+                currentStep--;
+                document.getElementById(`step-${currentStep}`).classList.add('active');
+                
+                document.getElementById('btn-next').innerHTML = 'Next <i class="fa-solid fa-arrow-right"></i>';
+                checkNextButton(currentStep);
+                updateProgress();
+                
+                if (currentStep === 0) {
+                    document.getElementById('btn-prev').style.visibility = 'hidden';
+                }
+            }
+        }
+
+        updateProgress();
+
+        function runExplorer() {
+            document.getElementById('steps-container').style.display = 'none';
+            document.getElementById('wizard-actions').style.display = 'none';
+            document.getElementById('wizard-header').style.display = 'none';
+            document.getElementById('progress-wrapper').style.display = 'none';
+            document.getElementById('calculating-state').style.display = 'flex';
+
+            setTimeout(() => {
+                const branchCard = document.querySelector('#step-0 .option-card.selected');
+                const branch = branchCard ? branchCard.getAttribute('data-val') : "";
+                const selectedInterests = Array.from(document.querySelectorAll('#step-1 .option-card.selected')).map(cb => cb.getAttribute('data-val'));
+                const goalCard = document.querySelector('#step-2 .option-card.selected');
+                const goal = goalCard ? goalCard.getAttribute('data-val') : "";
+                const destinationCard = document.querySelector('#step-3 .option-card.selected');
+                const destination = destinationCard ? destinationCard.getAttribute('data-val') : "";
+                const selectedDegrees = Array.from(document.querySelectorAll('#step-4 .option-card.selected')).map(cb => cb.getAttribute('data-val'));
+                const selectedExams = Array.from(document.querySelectorAll('#step-5 .option-card.selected')).map(cb => cb.getAttribute('data-val'));
+
+                let results = allCourses.map(crs => {
+                    let score = 0;
+                    const eBranches = crs.eligibleBranches ? crs.eligibleBranches.split(',').map(s=>s.trim().toLowerCase()) : [];
+                    let branchString = branch.toLowerCase();
+
+                    let aliases = [branchString];
+                    if (branchString.includes('computer') || branchString.includes('cse')) aliases.push('cse');
+                    if (branchString.includes('electronics') || branchString.includes('ece')) aliases.push('ece');
+                    if (branchString.includes('electrical') || branchString.includes('eee')) aliases.push('eee');
+                    if (branchString.includes('mechanical')) { aliases.push('me'); aliases.push('mechanical'); }
+                    if (branchString.includes('civil')) { aliases.push('ce'); aliases.push('civil'); }
+
+                    let matchedBranch = false;
+                    for (let b of eBranches) {
+                        if (!b || b === 'all' || b === 'other' || b.includes('all branches') || b.includes('any')) {
+                            matchedBranch = true; 
+                            break;
+                        }
+                        for (let al of aliases) {
+                            if (b === al || b.includes(al) || al.includes(b)) {
+                                matchedBranch = true; 
+                                break;
+                            }
+                        }
+                        if (matchedBranch) break;
+                    }
+
+                    if (!matchedBranch) return { ...crs, score: 0, matchPercentage: 0 };
+                    score += 20;
+
+                    const cInterests = crs.interestAreas ? crs.interestAreas.split(',').map(s=>s.trim().toLowerCase()) : [];
+                    let matchedInterests = selectedInterests.filter(ia => cInterests.some(ci => ci.includes(ia.toLowerCase()) || ia.toLowerCase().includes(ci)));
+                    score += matchedInterests.length * 10;
+
+                    const cGoals = crs.careerGoals ? crs.careerGoals.split(',').map(s=>s.trim().toLowerCase()) : [];
+                    if (goal && cGoals.some(cg => cg.includes(goal.toLowerCase()) || goal.toLowerCase().includes(cg))) score += 15;
+
+                    const cDestinations = crs.studyDestinations ? crs.studyDestinations.split(',').map(s=>s.trim().toLowerCase()) : [];
+                    if (destination === 'Both' || (destination !== 'Both' && cDestinations.some(cd => cd.includes(destination.toLowerCase()) || destination.toLowerCase().includes(cd)))) score += 10;
+
+                    const cDegrees = crs.degreeOptions ? crs.degreeOptions.split(',').map(s=>s.trim().toLowerCase()) : [];
+                    let matchedDegrees = selectedDegrees.filter(d => cDegrees.some(cd => cd.includes(d.toLowerCase()) || d.toLowerCase().includes(cd)));
+                    if (matchedDegrees.length > 0) score += 10;
+
+                    let maxScore = 20 + (selectedInterests.length * 10) + (goal ? 15 : 0) + 10 + (selectedDegrees.length > 0 ? 10 : 0);
+                    if (maxScore === 0) maxScore = 1;
+
+                    let matchPercentage = Math.round((score / maxScore) * 100);
+                    if (matchPercentage > 100) matchPercentage = 100;
+
+                    return { ...crs, score, matchPercentage };
+                }).filter(crs => crs.matchPercentage > 15);
+
+                results.sort((a, b) => b.matchPercentage - a.matchPercentage);
+                
+                document.getElementById('calculating-state').style.display = 'none';
+                document.getElementById('wizard-container').style.display = 'none';
+                displayResults(results);
+            }, 1500);
+        }
+
+        function resetWizard() {
+            document.getElementById('results-section').style.display = 'none';
+            document.getElementById('wizard-container').style.display = 'flex';
+            document.getElementById('steps-container').style.display = 'block';
+            document.getElementById('wizard-actions').style.display = 'flex';
+            document.getElementById('wizard-header').style.display = 'block';
+            document.getElementById('progress-wrapper').style.display = 'block';
+            
+            document.getElementById(`step-${currentStep}`).classList.remove('active');
+            currentStep = 0;
+            document.getElementById(`step-0`).classList.add('active');
+            updateProgress();
+            
+            document.getElementById('btn-prev').style.visibility = 'hidden';
+            checkNextButton(0);
+        }
+
+        function displayResults(results) {
+            const resultsSection = document.getElementById('results-section');
+            const container = document.getElementById('results-container');
+            const examsContainer = document.getElementById('exams-container');
+            
+            resultsSection.style.display = 'block';
+
+            if (results.length === 0) {
+                container.innerHTML = '<p style="color:#666; text-align:center; padding: 3rem; grid-column: 1/-1;">No matching courses found. Try broadening your criteria!</p>';
+                examsContainer.innerHTML = '';
+                return;
+            }
+
+            container.innerHTML = results.slice(0, 6).map((crs, idx) => {
+                window['current_crs_' + crs.id] = crs;
+                const degreeArr = crs.degreeOptions ? crs.degreeOptions.split(',').map(s=>s.trim()) : [];
+                let tagsHtml = degreeArr.slice(0,3).map(d => `<span style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-weight: 500; font-size: 0.75rem; color: #ddd;">${d}</span>`).join('');
+
+                let badgeColor = 'rgba(0, 255, 136, 0.2)';
+                let textColor = '#00ff88';
+                if (crs.matchPercentage < 60) {
+                    badgeColor = 'rgba(255, 165, 0, 0.2)';
+                    textColor = 'orange';
+                }
+
+                return `
+                    <div class="course-card" style="position: relative;">
+                        <div style="position: absolute; top: 15px; right: 15px; background: ${badgeColor}; color: ${textColor}; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; z-index: 5; border: 1px solid ${textColor};">${crs.matchPercentage}% MATCH</div>
+                        <div class="course-img-wrap">
+                            <img src="${crs.image || 'https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070'}" class="course-img">
+                        </div>
+                        <div class="course-content">
+                            <h3 class="course-title">${crs.title}</h3>
+                            <span style="color: var(--primary-red); font-size: 0.8rem; margin-bottom: 12px; font-weight: 700;">${crs.parentCategoryName}</span>
+                            <div class="course-meta" style="flex-grow: 1;">
+                                ${tagsHtml}
+                            </div>
+                            <button onclick="openCourseModal('${crs.id}')" class="btn btn-secondary" style="width:100%; border-radius: 8px; font-size:0.85rem; padding: 10px;">
+                                <i class="fa-solid fa-eye"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            let allExams = [];
+            results.forEach(crs => {
+                if (crs.entranceExams) {
+                    try {
+                        const parsedExams = JSON.parse(crs.entranceExams);
+                        parsedExams.forEach(ex => {
+                            if (!allExams.find(e => e.name === ex.name)) allExams.push(ex);
+                        });
+                    } catch(e){}
+                }
+            });
+
+            examsContainer.innerHTML = allExams.map(e => `
+                <a href="${e.website || '#'}" target="_blank" class="option-card" style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); padding: 15px 24px; border-radius: 12px; color: white; text-decoration: none; display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 160px; transition:0.3s;">
+                    <strong style="font-size: 1.15rem; color: var(--primary-red);">${e.name}</strong>
+                    <span style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">${e.applicableCountries || 'India'}</span>
+                </a>
+            `).join('');
+            
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openCourseModal(id) {
+            const crs = window['current_crs_' + id];
+            if (!crs) return;
+
+            document.getElementById('modal-title').innerText = crs.title;
+            if(crs.image) {
+                document.getElementById('modal-img').style.backgroundImage = `url('${crs.image}')`;
+                document.getElementById('modal-img').style.display = 'block';
+            } else {
+                document.getElementById('modal-img').style.display = 'none';
+            }
+            
+            const degrees = crs.degreeOptions ? crs.degreeOptions.split(',').map(s=>s.trim()) : [];
+            const careers = crs.careerOpportunities ? crs.careerOpportunities.split(',').map(s=>s.trim()) : [];
+            const interests = crs.interestAreas ? crs.interestAreas.split(',').map(s=>s.trim()) : [];
+            const destinations = crs.studyDestinations ? crs.studyDestinations.split(',').map(s=>s.trim()) : [];
+            let exams = [];
+            let institutions = [];
+            
+            try { if(crs.entranceExams) exams = JSON.parse(crs.entranceExams); } catch(e){}
+            try { if(crs.topInstitutions) institutions = JSON.parse(crs.topInstitutions); } catch(e){}
+
+            let tagsRowHtml = '';
+            const allTags = [...degrees, ...interests, ...destinations].filter(t => t);
+            if (allTags.length > 0) {
+                tagsRowHtml = `
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                        ${allTags.map(t => `<span style="background: rgba(229, 26, 36, 0.15); border: 1px solid var(--primary-red); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">${t}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            let html = `
+                ${tagsRowHtml}
+                
+                ${crs.note ? `
+                <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 25px; border-radius: 4px; color: #fff;">
+                    <strong style="color: #ffc107;"><i class="fa-solid fa-triangle-exclamation"></i> Note:</strong> ${crs.note}
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: var(--primary-red); margin-bottom: 10px; font-size: 1.1rem; font-weight: 700;">About the Program</h4>
+                    <p style="color: #ddd; line-height: 1.6; font-size: 0.95rem;">${crs.description || 'No description available.'}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-bottom: 25px;">
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem; font-weight:700;"><i class="fa-solid fa-briefcase"></i> Career Outcomes</h4>
+                        <ul style="color: #ccc; font-size: 0.9rem; padding-left: 20px; margin: 0; line-height: 1.6;">
+                            ${careers.map(c => `<li style="margin-bottom: 5px;">${c}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem; font-weight:700;"><i class="fa-solid fa-building-columns"></i> Top Institutions</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            ${institutions.map(inst => `
+                                <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px;">
+                                    <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 2px;">${inst.name}</strong>
+                                    <span style="color: #aaa; font-size: 0.8rem; display: block; margin-bottom: 4px;"><i class="fa-solid fa-location-dot"></i> ${inst.location || 'Unknown'}</span>
+                                    ${inst.website ? `<a href="${inst.website}" target="_blank" style="color: var(--primary-red); font-size: 0.8rem; text-decoration: none;"><i class="fa-solid fa-link"></i> Website</a>` : ''}
+                                </div>
+                            `).join('')}
+                            ${institutions.length === 0 ? '<span style="color:#666; font-size: 0.9rem;">No specific institutions listed.</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem; font-weight:700;"><i class="fa-solid fa-file-signature"></i> Entrance Exams</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        ${exams.map(e => `
+                            <a href="${e.website || '#'}" target="_blank" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 10px; color: white; text-decoration: none; font-size: 0.9rem; transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary-red)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
+                                <strong style="display: block; font-size: 1.05rem;">${e.name}</strong>
+                                <span style="font-size: 0.8rem; color: #888; display: block; margin-top: 4px;">${e.purpose || ''}</span>
+                            </a>
+                        `).join('')}
+                        ${exams.length === 0 ? '<span style="color:#666; font-size: 0.9rem;">No specific exams listed.</span>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modal-desc').innerHTML = html;
+            if (crs.link && crs.link !== "#") {
+                document.getElementById('modal-link').href = crs.link;
+                document.getElementById('modal-link').style.display = 'inline-block';
+            } else {
+                document.getElementById('modal-link').style.display = 'none';
+            }
+            document.getElementById('course-modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('course-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>

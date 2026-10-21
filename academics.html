@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheme &amp; Syllabus | MACE Academic Support Cell</title>
+    <meta name="description" content="Official MACE UG/PG Scheme and Syllabus PDFs — 2024 Autonomous and 2019 KTU Scheme for all B.Tech and PG programmes.">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        /* ── Scheme Tabs ─────────────────────────────────────────────────── */
+        .scheme-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .scheme-tab {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 22px;
+            border-radius: 50px;
+            border: 1px solid var(--border-glass);
+            background: rgba(255,255,255,0.04);
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: var(--font-body);
+        }
+        .scheme-tab:hover { border-color: var(--primary-red); color: white; }
+        .scheme-tab.active {
+            background: rgba(229,26,36,0.12);
+            border-color: var(--primary-red);
+            color: white;
+        }
+        .scheme-badge {
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 50px;
+            font-weight: 800;
+        }
+        .badge-2024 { background: rgba(229,26,36,0.2); color: #ff6b6b; }
+        .badge-2019 { background: rgba(59,130,246,0.2); color: #60a5fa; }
+        .badge-pg   { background: rgba(168,85,247,0.2); color: #c084fc; }
+
+        /* ── Related Docs Grid ──────────────────────────────────────────── */
+        .related-docs-wrap { margin-top: 4rem; }
+        .related-docs-wrap h2 {
+            font-size: 1.6rem;
+            font-family: var(--font-heading);
+            margin-bottom: 1.5rem;
+        }
+        #related-docs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <img src="images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="academics.html" class="active">Academics</a></li>
+                <li><a href="notes.html">Notes</a></li>
+                <li><a href="career.html">Career</a></li>
+                <li><a href="scholarship.html">Scholarship</a></li>
+                <li><a href="support.html">Support</a></li>
+                <li><a href="tools.html">Tools</a></li>
+            </ul>
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="academics.html" class="active">Academics</a></li>
+            <li><a href="notes.html">Notes</a></li>
+            <li><a href="career.html">Career</a></li>
+            <li><a href="scholarship.html">Scholarship</a></li>
+            <li><a href="support.html">Support</a></li>
+            <li><a href="tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner">
+        <div class="container">
+            <div class="page-banner-content scroll-reveal">
+                <span class="section-badge"><i class="fa-solid fa-book-open"></i> CURRICULUM &amp; SYLLABUS</span>
+                <h1>Scheme &amp; <span class="gradient-text">Syllabus</span></h1>
+                <p>Official MACE UG &amp; PG Scheme and Syllabus documents — 2024 Autonomous &amp; 2019 KTU Scheme.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section style="padding: 60px 0 100px;">
+        <div class="container">
+
+            <!-- MACE Brochure Banner -->
+            <div style="max-width:900px;margin:0 auto 50px auto;">
+                <div style="background:linear-gradient(135deg,rgba(229,26,36,0.1) 0%,rgba(255,255,255,0.02) 100%);border:1px solid var(--border-glass);border-radius:20px;padding:30px;display:flex;align-items:center;justify-content:space-between;gap:30px;flex-wrap:wrap;">
+                    <div style="flex:1;min-width:250px;">
+                        <span class="update-badge general" style="margin-bottom:8px;">Official Brochure</span>
+                        <h2 style="font-size:1.5rem;color:var(--text-white);margin-bottom:8px;">MACE Academic Brochure 2025</h2>
+                        <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">
+                            Mar Athanasius College of Engineering &mdash; Est. 1961. Affiliated to APJ Abdul Kalam Technological University (KTU). Explore departments, facilities and intake details.
+                        </p>
+                    </div>
+                    <a href="https://mace.ac.in/wp-content/uploads/2025/08/MACE-2025.pdf" target="_blank" rel="noopener"
+                        class="btn btn-primary"
+                        style="display:inline-flex;align-items:center;gap:8px;text-decoration:none;border-radius:10px;padding:12px 24px;font-weight:700;">
+                        <i class="fa-solid fa-file-pdf"></i> Download Brochure
+                    </a>
+                </div>
+            </div>
+
+            <!-- Scheme Tabs -->
+            <div class="scheme-tabs">
+                <button class="scheme-tab active" id="tab-2024" onclick="switchScheme('2024')">
+                    <i class="fa-solid fa-robot"></i>
+                    2024 Scheme
+                    <span class="scheme-badge badge-2024">Autonomous</span>
+                </button>
+                <button class="scheme-tab" id="tab-2019" onclick="switchScheme('2019')">
+                    <i class="fa-solid fa-university"></i>
+                    2019 Scheme
+                    <span class="scheme-badge badge-2019">KTU</span>
+                </button>
+                <button class="scheme-tab" id="tab-pg" onclick="switchScheme('PG')">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    PG Programmes
+                    <span class="scheme-badge badge-pg">M.Tech / MCA</span>
+                </button>
+                <a href="https://mace.ac.in/academics/academics-scheme-syllabus-ug/" target="_blank" rel="noopener"
+                    class="scheme-tab" style="text-decoration:none;">
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                    View on mace.ac.in
+                </a>
+            </div>
+
+            <!-- Breadcrumb / inline preview header -->
+            <div id="explorer-breadcrumb" style="max-width:1000px;margin:0 auto;"></div>
+
+            <!-- Syllabus Grid (injected by academics.js) -->
+            <div class="explorer-grid" id="syllabus-grid"
+                style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px;max-width:1200px;margin:0 auto;">
+            </div>
+
+            <!-- Related Academic Documents -->
+            <div class="related-docs-wrap scroll-reveal">
+                <h2>
+                    <i class="fa-solid fa-folder-open" style="color:var(--primary-red);margin-right:10px;font-size:1.3rem;"></i>
+                    Related <span class="red-text">Academic Documents</span>
+                </h2>
+                <div id="related-docs-grid"></div>
+            </div>
+
+            <!-- Upload Notes Section -->
+            <div class="related-docs-wrap scroll-reveal" style="margin-top: 5rem;">
+                <h2>
+                    <i class="fa-solid fa-cloud-arrow-up" style="color:var(--primary-red);margin-right:10px;font-size:1.3rem;"></i>
+                    Upload <span class="red-text">Your Notes</span>
+                </h2>
+                <p style="color:var(--text-muted);margin-bottom:2rem;font-size:0.95rem;">Help your peers by sharing your notes, lab records, or solved papers. Submissions are reviewed by the SFI MACE Unit before publishing.</p>
+
+                <div style="background:linear-gradient(135deg,rgba(229,26,36,0.06) 0%,rgba(255,255,255,0.02) 100%);border:1px solid var(--border-glass);border-radius:24px;padding:2.5rem;max-width:800px;" class="glass-panel">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.2rem;" class="upload-form-grid">
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <label style="color:var(--text-muted);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Your Name</label>
+                            <input type="text" id="upload-name" class="input-field" placeholder="e.g. Arjun Menon" style="height:46px;">
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <label style="color:var(--text-muted);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Subject / Topic</label>
+                            <input type="text" id="upload-subject" class="input-field" placeholder="e.g. Data Structures Module 3" style="height:46px;">
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <label style="color:var(--text-muted);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Branch</label>
+                            <select id="upload-branch" class="input-field" style="height:46px;background:rgba(0,0,0,0.2);color:white;">
+                                <option value="" disabled selected>Select Branch</option>
+                                <option>CSE</option>
+                                <option>CSE-DS</option>
+                                <option>AIML</option>
+                                <option>ECE</option>
+                                <option>EEE</option>
+                                <option>Mechanical</option>
+                                <option>Civil</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:6px;">
+                            <label style="color:var(--text-muted);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Semester</label>
+                            <select id="upload-semester" class="input-field" style="height:46px;background:rgba(0,0,0,0.2);color:white;">
+                                <option value="" disabled selected>Select Semester</option>
+                                <option>S1</option><option>S2</option><option>S3</option><option>S4</option>
+                                <option>S5</option><option>S6</option><option>S7</option><option>S8</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:1.2rem;">
+                        <label style="color:var(--text-muted);font-size:0.8rem;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">Type of Material</label>
+                        <select id="upload-type" class="input-field" style="height:46px;background:rgba(0,0,0,0.2);color:white;">
+                            <option value="" disabled selected>Select Material Type</option>
+                            <option>Lecture Notes</option>
+                            <option>Lab Record</option>
+                            <option>Previous Year Questions (PYQ)</option>
+                            <option>Assignment / Tutorial</option>
+                            <option>Reference Book Summary</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+
+                    <!-- Drag & Drop Zone -->
+                    <div id="upload-dropzone" style="border:2px dashed rgba(229,26,36,0.35);border-radius:16px;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:0.3s;margin-bottom:1.5rem;background:rgba(229,26,36,0.03);" onclick="document.getElementById('upload-file-input').click()" ondragover="event.preventDefault();this.style.borderColor='var(--primary-red)';this.style.background='rgba(229,26,36,0.08)'" ondragleave="this.style.borderColor='rgba(229,26,36,0.35)';this.style.background='rgba(229,26,36,0.03)'" ondrop="handleFileDrop(event)">
+                        <i class="fa-solid fa-file-arrow-up" style="font-size:2.2rem;color:var(--primary-red);opacity:0.7;margin-bottom:12px;display:block;"></i>
+                        <p style="color:var(--text-muted);font-size:0.9rem;margin:0;">Drag &amp; drop your file here, or <span style="color:var(--primary-red);font-weight:600;">click to browse</span></p>
+                        <p style="color:#555;font-size:0.75rem;margin-top:6px;">PDF, DOCX, PPTX &mdash; max 30MB</p>
+                        <p id="selected-file-name" style="color:#34d399;font-size:0.82rem;margin-top:10px;display:none;"></p>
+                    </div>
+                    <input type="file" id="upload-file-input" accept=".pdf,.doc,.docx,.ppt,.pptx" style="display:none;" onchange="showSelectedFile(this)">
+
+                    <button id="submit-notes-btn" class="btn btn-primary" style="width:100%;padding:15px;font-size:1rem;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:10px;" onclick="submitNotes()">
+                        <i class="fa-brands fa-whatsapp"></i> Submit via WhatsApp to SFI MACE
+                    </button>
+                    <p style="color:#555;font-size:0.75rem;text-align:center;margin-top:10px;">Your details will be pre-filled in a WhatsApp message to our team. Attach the file in the chat.</p>
+                </div>
+            </div>
+
+            <style>
+                .upload-form-grid { grid-template-columns: 1fr 1fr; }
+                @media(max-width:600px){ .upload-form-grid { grid-template-columns: 1fr; } }
+            </style>
+            <script>
+                function showSelectedFile(input) {
+                    if (input.files && input.files[0]) {
+                        var name = input.files[0].name;
+                        var el = document.getElementById('selected-file-name');
+                        el.textContent = '\u2705 Selected: ' + name;
+                        el.style.display = 'block';
+                    }
+                }
+                function handleFileDrop(e) {
+                    e.preventDefault();
+                    var dt = e.dataTransfer;
+                    var input = document.getElementById('upload-file-input');
+                    if (dt.files.length) {
+                        // Can't assign dataTransfer to file input directly, just show name
+                        var el = document.getElementById('selected-file-name');
+                        el.textContent = '\u2705 Dropped: ' + dt.files[0].name;
+                        el.style.display = 'block';
+                    }
+                    var dz = document.getElementById('upload-dropzone');
+                    dz.style.borderColor = 'rgba(229,26,36,0.35)';
+                    dz.style.background = 'rgba(229,26,36,0.03)';
+                }
+                function submitNotes() {
+                    var name    = document.getElementById('upload-name').value.trim();
+                    var subject = document.getElementById('upload-subject').value.trim();
+                    var branch  = document.getElementById('upload-branch').value;
+                    var sem     = document.getElementById('upload-semester').value;
+                    var type    = document.getElementById('upload-type').value;
+
+                    if (!name || !subject || !branch || !sem || !type) {
+                        alert('Please fill in all fields before submitting.');
+                        return;
+                    }
+
+                    var msg = encodeURIComponent(
+                        '\uD83D\uDCDA *Notes Submission — MACE Academic Support Portal*\n' +
+                        '\n\uD83D\uDC64 Name: ' + name +
+                        '\n\uD83C\uDF93 Branch: ' + branch + ' | ' + sem +
+                        '\n\uD83D\uDCCC Subject: ' + subject +
+                        '\n\uD83D\uDCC2 Type: ' + type +
+                        '\n\n(Please attach the file to this message)'
+                    );
+                    // Opens WhatsApp with the SFI MACE channel
+                    window.open('https://wa.me/91?text=' + msg, '_blank');
+                }
+            </script>
+
+        </div>
+    </section>
+
+    <!-- Glass Footer matching asc.sficet.in -->
+    <footer class="glass-footer">
+        <div class="footer-top-accent"></div>
+
+        <div class="footer-inner">
+            <!-- COL 1: SFI Support Cell -->
+            <div class="footer-col-section scroll-reveal">
+                <div class="footer-asc-brand">
+                    <img src="images/asc_logo.jpg" alt="ASC Logo" class="footer-asc-logo" loading="lazy">
+                    <div>
+                        <h2 class="footer-asc-title">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                        <p class="footer-asc-sub">An initiative by SFI MACE Unit</p>
+                    </div>
+                </div>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI Support Cell">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank" class="fsoc fsoc-wa" title="WhatsApp Group">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </a>
+                </div>
+                <a href="https://chat.whatsapp.com/DkC0nwnSjHbFzlPNrJ71BW" target="_blank" class="footer-whatsapp-btn">
+                    <i class="fa-brands fa-whatsapp"></i> Join WhatsApp Group
+                </a>
+            </div>
+
+            <!-- COL 2: Quick Links (centred) -->
+            <section class="footer-col-section footer-col-middle scroll-reveal">
+                <h3 class="footer-col-title">Quick Links</h3>
+                <nav class="footer-mid-links">
+                    <a href="index.html">Home</a>
+                    <a href="academics.html">Academics</a>
+                    <a href="notes.html">Notes</a>
+                    <a href="career.html">Career</a>
+                    <a href="scholarship.html">Scholarship</a>
+                    <a href="support.html">Support</a>
+                    <a href="tools.html">Tools</a>
+                </nav>
+            </section>
+
+            <!-- COL 3: SFI MACE -->
+            <div class="footer-col-section footer-col-right scroll-reveal">
+                <div class="footer-logo-row">
+                    <img src="images/asc_logo.jpg" alt="SFI Logo" class="footer-sfi-logo" loading="lazy">
+                    <h2 class="footer-brand-title">SFI <span class="gradient-text">MACE</span></h2>
+                </div>
+                <p class="footer-brand-desc">Independence, Democracy, and Socialism</p>
+                <p class="footer-contacts-label">Connect with us</p>
+                <div class="footer-socials">
+                    <a href="https://www.instagram.com/sfi_mace?igsh=bzd2cWZvZ2thZzdh" target="_blank" class="fsoc fsoc-insta" title="Instagram – SFI MACE Unit">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© SFI MACE 2026. All rights reserved.</p>
+            <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/canvas-bg.js"></script>
+    <script src="js/academics.js"></script>
+
+</body>
+</html>
+
+
+
+

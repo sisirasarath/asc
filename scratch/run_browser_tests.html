@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Dual Engine Automated Test Suite</title>
+</head>
+<body>
+<div id="test-log" style="font-family:monospace;white-space:pre;padding:20px;"></div>
+
+<!-- Include same DOM structure as notes.html -->
+<div id="notesSearch"></div>
+<button id="tab-ktu2024"></button>
+<button id="tab-mace"></button>
+<button id="tab-ktu"></button>
+<button id="tab-contribute"></button>
+
+<div id="panel-ktu2024">
+    <div id="ktu-sem-filters">
+        <button class="sem-btn" data-sem="s1"><span id="ktu-badge-s1"></span></button>
+        <button class="sem-btn" data-sem="s2"><span id="ktu-badge-s2"></span></button>
+        <button class="sem-btn" data-sem="s3"><span id="ktu-badge-s3"></span></button>
+        <button class="sem-btn" data-sem="s4"><span id="ktu-badge-s4"></span></button>
+        <button class="sem-btn" data-sem="s5"><span id="ktu-badge-s5"></span></button>
+        <button class="sem-btn" data-sem="s6"><span id="ktu-badge-s6"></span></button>
+        <button class="sem-btn" data-sem="s7"><span id="ktu-badge-s7"></span></button>
+        <button class="sem-btn" data-sem="s8"><span id="ktu-badge-s8"></span></button>
+    </div>
+    <div id="ktu2024-content"></div>
+</div>
+
+<div id="panel-mace">
+    <div id="mace-sem-filters">
+        <button class="sem-btn" data-sem="s1"><span id="mace-badge-s1"></span></button>
+        <button class="sem-btn" data-sem="s2"><span id="mace-badge-s2"></span></button>
+        <button class="sem-btn" data-sem="s3"><span id="mace-badge-s3"></span></button>
+        <button class="sem-btn" data-sem="s4"><span id="mace-badge-s4"></span></button>
+        <button class="sem-btn" data-sem="s5"><span id="mace-badge-s5"></span></button>
+        <button class="sem-btn" data-sem="s6"><span id="mace-badge-s6"></span></button>
+        <button class="sem-btn" data-sem="s7"><span id="mace-badge-s7"></span></button>
+        <button class="sem-btn" data-sem="s8"><span id="mace-badge-s8"></span></button>
+    </div>
+    <div id="mace-cat-filters"></div>
+    <div id="mace-results-bar"></div>
+    <span id="mace-count"></span>
+    <div id="mace-content"></div>
+</div>
+
+<div id="panel-ktu"></div>
+<div id="panel-contribute"></div>
+
+<div id="pdfModal">
+    <div id="pdfModalTitle"></div>
+    <a id="pdfOpenLink"></a>
+    <div id="pdfModalLoading"></div>
+    <iframe id="pdfModalFrame"></iframe>
+</div>
+
+<script src="../js/ktu-2024-curriculum-data.js"></script>
+<script src="../js/mace-notes-data.js"></script>
+<script src="../js/portal-dual-engine.js"></script>
+
+<script>
+const logEl = document.getElementById('test-log');
+let passed = 0, failed = 0;
+
+function assert(condition, testName) {
+    if (condition) {
+        passed++;
+        logEl.textContent += `[PASS] ${testName}\n`;
+    } else {
+        failed++;
+        logEl.textContent += `[FAIL] ${testName}\n`;
+    }
+}
+
+try {
+    // Test 1: Data arrays loaded
+    assert(typeof KTU_2024_CURRICULUM_DATA !== 'undefined' && KTU_2024_CURRICULUM_DATA.length >= 54, 'KTU 2024 Database loaded (54+ courses)');
+    assert(typeof MACE_PRELOADED_NOTES !== 'undefined' && MACE_PRELOADED_NOTES.length >= 500, 'MACE Notes Database loaded (500+ verified files)');
+
+    // Test 2: Initial Render
+    renderKtu2024();
+    renderMaceNotes();
+    const ktuContent = document.getElementById('ktu2024-content').innerHTML;
+    const maceContent = document.getElementById('mace-content').innerHTML;
+    assert(ktuContent.includes('S1 Branch Selection'), 'KTU 2024 renders S1 Branch Selection');
+    assert(maceContent.includes('S1 Branch Selection'), 'MACE Notes renders S1 Branch Selection');
+    assert(maceContent.includes('Uncategorized Notes'), 'MACE Notes includes Uncategorized Notes category');
+
+    // Test 3: KTU Branch Navigation
+    selectKtuBranch('CSE');
+    const cseContent = document.getElementById('ktu2024-content').innerHTML;
+    assert(cseContent.includes('GAMAT101') || cseContent.includes('Mathematics'), 'KTU S1 CSE lists official courses');
+
+    // Test 4: Course Syllabus View
+    selectKtuSubject('GAMAT101');
+    const courseContent = document.getElementById('ktu2024-content').innerHTML;
+    assert(courseContent.includes('Module 1') && courseContent.includes('Module 5'), 'KTU Course view renders all 5 syllabus modules');
+    assert(typeof selectKtuCourse === 'function', 'selectKtuCourse alias exists');
+
+    // Test 5: Independent Filter Isolation
+    // Changing KTU semester to S3 should NOT alter MACE semester (which should remain S1)
+    filterKtuSem('s3');
+    assert(ktuSem === 's3', 'ktuSem is now s3');
+    assert(maceSem === 's1', 'maceSem remains isolated at s1');
+
+    // Changing MACE semester to S5 should NOT alter KTU semester (which should remain S3)
+    filterMaceSem('s5');
+    assert(maceSem === 's5', 'maceSem is now s5');
+    assert(ktuSem === 's3', 'ktuSem remains isolated at s3');
+
+    // Test 6: MACE Branch Navigation
+    selectMaceBranch('DS');
+    const dsMace = document.getElementById('mace-content').innerHTML;
+    assert(dsMace.includes('Data Science') || dsMace.includes('DS'), 'MACE Branch view renders Data Science');
+
+    // Test 7: MACE Category Filtering
+    filterMaceCat('qp');
+    assert(maceCat === 'qp', 'maceCat is qp');
+
+    // Test 8: Uncategorized Notes Branch Selection
+    selectMaceBranch('UNCATEGORIZED');
+    const uncatHtml = document.getElementById('mace-content').innerHTML;
+    assert(uncatHtml.includes('Uncategorized Notes') || uncatHtml.includes('General'), 'Uncategorized branch renders correctly');
+
+    // Test 9: PDF Modal
+    openPdfModal('https://drive.google.com/file/d/test/preview', 'https://drive.google.com/file/d/test/view', 'Test Document');
+    assert(document.getElementById('pdfModal').classList.contains('open'), 'PDF Modal opens with correct class');
+    closePdfModal();
+    assert(!document.getElementById('pdfModal').classList.contains('open'), 'PDF Modal closes properly');
+
+    logEl.textContent += `\nSUMMARY: ${passed} PASSED, ${failed} FAILED.\n`;
+} catch (err) {
+    failed++;
+    logEl.textContent += `[ERROR] Unexpected error: ${err.message}\nStack: ${err.stack}\n`;
+}
+</script>
+</body>
+</html>

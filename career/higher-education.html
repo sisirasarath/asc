@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="../images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Higher Education | MACE Academic Support Cell</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        /* Custom Overrides for Higher Education Hub */
+        .explorer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; }
+        
+        /* Category Card */
+        .folder-card { background: rgba(255,255,255,0.02); border: 1px solid var(--border-glass); border-radius: 15px; overflow: hidden; cursor: pointer; transition: 0.3s; position: relative; min-height: 220px; display: flex; align-items: flex-end; }
+        .folder-card:hover { border-color: var(--primary-red); transform: translateY(-5px); box-shadow: 0 10px 30px rgba(229,26,36,0.15); }
+        .folder-img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; z-index: 0; opacity: 0.5; transition: 0.4s; }
+        .folder-card:hover .folder-img { opacity: 0.7; transform: scale(1.05); }
+        .folder-info { position: relative; z-index: 1; padding: 20px; width: 100%; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 60%, transparent 100%); }
+        .folder-info h3 { margin: 0; color: white; font-size: 1.1rem; font-weight: 700; line-height: 1.2; }
+        
+        /* Course Card */
+        .course-card { background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 15px; overflow: hidden; transition: 0.3s; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
+        .course-card:hover { transform: translateY(-5px); border-color: var(--primary-red); box-shadow: 0 10px 30px rgba(229,26,36,0.15); }
+        .course-content { padding: 20px; flex: 1; display: flex; flex-direction: column; }
+        .course-title { font-size: 1.1rem; font-weight: 700; color: white; margin-bottom: 8px; }
+        .course-meta { font-size: 0.8rem; color: #888; margin-bottom: 15px; }
+
+        /* Modal */
+        #course-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(12px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #121212; border: 1px solid var(--border-glass); border-radius: 20px; width: 100%; max-width: 650px; display: flex; flex-direction: column; overflow: hidden; position: relative; max-height: 90vh; }
+        .modal-img { height: 250px; background-size: cover; background-position: center; position: relative; }
+        .modal-details { padding: 30px; overflow-y: auto; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.5); border: none; color: white; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .modal-title { font-size: 1.6rem; color: white; margin-bottom: 10px; font-weight: 800; }
+        .modal-desc { color: #aaa; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+        .modal-action { display: block; background: var(--primary-red); color: white; padding: 15px; border-radius: 10px; text-decoration: none; text-align: center; font-weight: 700; transition: 0.3s; }
+        .modal-action:hover { transform: translateY(-3px); box-shadow: 0 5px 20px var(--primary-red-glow); }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../academics.html">Academics</a></li>
+                <li><a href="../notes.html">Notes</a></li>
+                <li><a href="../career.html" class="active">Career</a></li>
+                <li><a href="../scholarship.html">Scholarship</a></li>
+                <li><a href="../support.html">Support</a></li>
+                <li><a href="../tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../academics.html">Academics</a></li>
+            <li><a href="../notes.html">Notes</a></li>
+            <li><a href="../career.html" class="active">Career</a></li>
+            <li><a href="../scholarship.html">Scholarship</a></li>
+            <li><a href="../support.html">Support</a></li>
+            <li><a href="../tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner" style="padding: 140px 0 60px 0;">
+        <div class="container" style="text-align: center;">
+            <div class="page-banner-content scroll-reveal">
+                <div class="breadcrumb" style="font-family: monospace; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1rem;">
+                    <a href="../career.html" style="color:var(--primary-red); text-decoration:none;">CAREER HUB</a> &gt; HIGHER EDUCATION
+                </div>
+                <div class="section-badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-graduation-cap"></i> HIGHER STUDIES</div>
+                <h1>Higher <span class="gradient-text">Education</span></h1>
+                <p>Post-Graduation, Research, and Professional Studies Guide.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section style="padding: 20px 0 80px 0;">
+        <div class="container">
+            
+            <!-- Back to Career link -->
+            <div style="text-align: center; margin-bottom: 40px;">
+                <a href="../career.html" class="btn btn-secondary" style="border-radius: 50px; padding: 10px 24px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Career Hub
+                </a>
+            </div>
+
+            <!-- Link Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; margin-bottom: 50px;">
+                <!-- Explorer Card -->
+                <a href="explore.html" style="text-decoration: none; display: block;">
+                    <div style="background: linear-gradient(135deg, rgba(229,26,36,0.1), rgba(0,0,0,0.8)); border: 1px solid var(--primary-red); border-radius: 20px; padding: 30px; text-align: center; transition: 0.3s; height: 100%; box-shadow: 0 10px 30px rgba(229,26,36,0.1);" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                        <i class="fa-solid fa-compass" style="font-size: 2.5rem; color: var(--primary-red); margin-bottom: 15px;"></i>
+                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 8px;">Career Path Explorer</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Match your degree and interests with the best post-graduate specializations dynamically.</p>
+                    </div>
+                </a>
+                
+                <!-- Entrance Exams Card -->
+                <a href="entrance.html" style="text-decoration: none; display: block;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid var(--border-glass); border-radius: 20px; padding: 30px; text-align: center; transition: 0.3s; height: 100%;" onmouseover="this.style.transform='translateY(-5px)'; this.style.borderColor='white'" onmouseout="this.style.transform='none'; this.style.borderColor='var(--border-glass)'">
+                        <i class="fa-solid fa-building-columns" style="font-size: 2.5rem; color: white; margin-bottom: 15px;"></i>
+                        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 8px;">Entrance Exams Directory</h3>
+                        <p style="color: var(--text-muted); font-size: 0.9rem; line-height: 1.5;">Check syllabus details, deadlines, and registration links for GATE, GRE, CAT, IELTS, and more.</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Dynamic Folder Grid -->
+            <div>
+                <h2 style="margin-bottom: 2rem; color: white; border-left: 4px solid var(--primary-red); padding-left: 15px;">Explore Programs</h2>
+                
+                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 1.5rem;">
+                    <button id="explorer-back-btn" onclick="navigateBack()" style="display: none; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); color: white; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: 0.3s; font-size: 0.8rem; font-weight: 600;">
+                        <i class="fa-solid fa-chevron-left"></i> Back
+                    </button>
+                    <div id="breadcrumb-container" style="font-size: 1.1rem; color: var(--text-muted);">All Categories</div>
+                </div>
+
+                <div id="grid-container" class="explorer-grid">
+                    <div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 40px;">Loading program options...</div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Glass Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>© SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="course-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-img" id="modal-img" style="height: 200px; background-size: cover; background-position: center; position: relative;"></div>
+            <div class="modal-details">
+                <h2 class="modal-title" id="modal-title">Program Title</h2>
+                <div class="modal-desc" id="modal-desc">Description</div>
+                <a href="#" target="_blank" class="modal-action" id="modal-link">Learn More & Apply</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/canvas-bg.js"></script>
+    <script src="../js/storage.js"></script>
+
+    <script>
+        let currentFolderId = 'root';
+        let breadcrumbs = [{ id: 'root', name: 'All Categories' }];
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (window.SFI_STORAGE && window.SFI_STORAGE.fetchLiveR2Data) {
+                await window.SFI_STORAGE.fetchLiveR2Data();
+            }
+            renderGrid();
+        });
+
+        function navigateToFolder(id, breadcrumbIndex = -1) {
+            if (breadcrumbIndex !== -1) {
+                breadcrumbs = breadcrumbs.slice(0, breadcrumbIndex + 1);
+            } else {
+                const data = window.SFI_STORAGE.getData();
+                const currentData = data.higher_education[currentFolderId];
+                const folder = currentData.categories.find(c => c.id === id);
+                if (folder) {
+                    breadcrumbs.push({ id: folder.id, name: folder.name });
+                }
+            }
+            currentFolderId = id;
+            renderGrid();
+        }
+
+        function navigateBack() {
+            if (breadcrumbs.length > 1) {
+                const parentIdx = breadcrumbs.length - 2;
+                const parentId = breadcrumbs[parentIdx].id;
+                navigateToFolder(parentId, parentIdx);
+            }
+        }
+
+        function renderGrid() {
+            const data = window.SFI_STORAGE.getData();
+            const container = document.getElementById('grid-container');
+            const breadcrumbContainer = document.getElementById('breadcrumb-container');
+            const backBtn = document.getElementById('explorer-back-btn');
+
+            if (!data.higher_education || !data.higher_education[currentFolderId]) {
+                container.innerHTML = '<p style="color:var(--primary-red);">Content not found.</p>';
+                return;
+            }
+
+            if (breadcrumbs.length > 1) {
+                backBtn.style.display = 'inline-block';
+            } else {
+                backBtn.style.display = 'none';
+            }
+
+            // Render breadcrumbs
+            breadcrumbContainer.innerHTML = breadcrumbs.map((bc, idx) => {
+                if (idx === breadcrumbs.length - 1) {
+                    return `<span style="color:white; font-weight:700;">${bc.name}</span>`;
+                }
+                return `<a href="#" onclick="navigateToFolder('${bc.id}', ${idx})" style="color:var(--primary-red); text-decoration:none;">${bc.name}</a>`;
+            }).join(' > ');
+
+            const folderData = data.higher_education[currentFolderId];
+            let html = '';
+
+            const categories = folderData.categories || [];
+            const courses = folderData.courses || [];
+
+            if (categories.length === 0 && courses.length === 0) {
+                container.innerHTML = '<p style="color:#666;">No items available in this category.</p>';
+                return;
+            }
+
+            // Render Categories
+            categories.forEach(cat => {
+                html += `
+                    <div class="course-card" style="cursor: pointer; height: 220px; display: flex; flex-direction: column;" onclick="navigateToFolder('${cat.id}')">
+                        <div style="height: 140px; background-image: url('${cat.image}'); background-size: cover; background-position: center;"></div>
+                        <div style="padding: 15px; flex: 1; display: flex; align-items: center; justify-content: space-between;">
+                            <h3 style="font-size: 1.2rem; font-weight: 700; color: white; margin: 0;">${cat.name}</h3>
+                            <i class="fa-solid fa-folder-open" style="color: var(--primary-red); font-size: 1.2rem;"></i>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Render Courses (Roadmaps)
+            courses.forEach(crs => {
+                const degreeArr = crs.degreeOptions ? crs.degreeOptions.split(',').map(s=>s.trim()) : [];
+                let tagsHtml = '';
+                if(degreeArr.length > 0) {
+                    tagsHtml = degreeArr.slice(0,3).map(d => `<span style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-weight: 500; font-size: 0.75rem; color: #ddd;">${d}</span>`).join('');
+                    if(degreeArr.length > 3) tagsHtml += `<span style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 4px 10px; border-radius: 20px; font-weight: 500; font-size: 0.75rem; color: #ddd;">+${degreeArr.length-3}</span>`;
+                }
+
+                window['current_crs_' + crs.id] = crs;
+
+                html += `
+                    <div class="course-card">
+                        <div style="height: 160px; background-image: url('${crs.image}'); background-size: cover; background-position: center; position: relative;">
+                            <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);"></div>
+                        </div>
+                        <div class="course-content">
+                            <h3 class="course-title" style="font-size: 1.2rem; font-weight: 700; color: white; margin: 0 0 15px 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; min-height: 2.8rem;">${crs.title}</h3>
+                            <div class="course-meta" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; flex-grow: 1; align-content: flex-start; max-height: 55px; overflow: hidden; position: relative;" title="Tags">
+                                ${tagsHtml}
+                            </div>
+                            <button onclick="openCourseModal('${crs.id}')" style="width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; color: white; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px;" onmouseover="this.style.background='var(--primary-red)'; this.style.borderColor='var(--primary-red)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.borderColor='rgba(255,255,255,0.2)'">
+                                <i class="fa-solid fa-eye"></i> View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function openCourseModal(id) {
+            const crs = window['current_crs_' + id];
+            if (!crs) return;
+
+            document.getElementById('modal-title').innerText = crs.title;
+            if(crs.image) {
+                document.getElementById('modal-img').style.backgroundImage = `url('${crs.image}')`;
+                document.getElementById('modal-img').style.display = 'block';
+            } else {
+                document.getElementById('modal-img').style.display = 'none';
+            }
+            
+            const degrees = crs.degreeOptions ? crs.degreeOptions.split(',').map(s=>s.trim()) : [];
+            const careers = crs.careerOpportunities ? crs.careerOpportunities.split(',').map(s=>s.trim()) : [];
+            const interests = crs.interestAreas ? crs.interestAreas.split(',').map(s=>s.trim()) : [];
+            const destinations = crs.studyDestinations ? crs.studyDestinations.split(',').map(s=>s.trim()) : [];
+            let exams = [];
+            let institutions = [];
+            
+            try { if(crs.entranceExams) exams = JSON.parse(crs.entranceExams); } catch(e){}
+            try { if(crs.topInstitutions) institutions = JSON.parse(crs.topInstitutions); } catch(e){}
+
+            let tagsRowHtml = '';
+            const allTags = [...degrees, ...interests, ...destinations].filter(t => t);
+            if (allTags.length > 0) {
+                tagsRowHtml = `
+                    <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px;">
+                        ${allTags.map(t => `<span style="background: rgba(229,26,36,0.15); border: 1px solid var(--primary-red); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">${t}</span>`).join('')}
+                    </div>
+                `;
+            }
+
+            let html = `
+                ${tagsRowHtml}
+                
+                ${crs.note ? `
+                <div style="background: rgba(255, 193, 7, 0.1); border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 25px; border-radius: 4px; color: #fff;">
+                    <strong style="color: #ffc107;"><i class="fa-solid fa-triangle-exclamation"></i> Note:</strong> ${crs.note}
+                </div>
+                ` : ''}
+                
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: var(--primary-red); margin-bottom: 10px; font-size: 1.1rem;">About the Program</h4>
+                    <p style="color: #ddd; line-height: 1.6; font-size: 0.95rem;">${crs.description || 'No description available.'}</p>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem;"><i class="fa-solid fa-briefcase"></i> Career Outcomes</h4>
+                        <ul style="color: #ccc; font-size: 0.9rem; padding-left: 20px; margin: 0; line-height: 1.6;">
+                            ${careers.map(c => `<li style="margin-bottom: 5px;">${c}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem;"><i class="fa-solid fa-building-columns"></i> Top Institutions</h4>
+                        <div style="display: flex; flex-direction: column; gap: 10px;">
+                            ${institutions.map(inst => `
+                                <div style="background: rgba(255,255,255,0.05); padding: 10px 12px; border-radius: 8px;">
+                                    <strong style="color: white; font-size: 0.9rem; display: block; margin-bottom: 2px;">${inst.name}</strong>
+                                    <span style="color: #aaa; font-size: 0.8rem; display: block; margin-bottom: 4px;"><i class="fa-solid fa-location-dot"></i> ${inst.location || 'Unknown'}</span>
+                                    ${inst.website ? `<a href="${inst.website}" target="_blank" style="color: var(--primary-red); font-size: 0.8rem; text-decoration: none;"><i class="fa-solid fa-link"></i> Website</a>` : ''}
+                                </div>
+                            `).join('')}
+                            ${institutions.length === 0 ? '<span style="color:#666; font-size: 0.9rem;">No specific institutions listed.</span>' : ''}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 25px;">
+                    <h4 style="color: var(--primary-red); margin-bottom: 15px; font-size: 1.1rem;"><i class="fa-solid fa-file-signature"></i> Entrance Exams</h4>
+                    <div style="display: flex; flex-wrap: wrap; gap: 15px;">
+                        ${exams.map(e => `
+                            <a href="${e.website}" target="_blank" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 10px; color: white; text-decoration: none; font-size: 0.9rem; transition: 0.3s;" onmouseover="this.style.borderColor='var(--primary-red)'" onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
+                                <strong style="display: block; font-size: 1.1rem;">${e.name}</strong>
+                                <span style="font-size: 0.8rem; color: #888; display: block; margin-top: 4px;">${e.purpose}</span>
+                                ${e.applicableCountries ? `<span style="font-size: 0.75rem; color: #666; display: block; margin-top: 2px;"><i class="fa-solid fa-globe"></i> ${e.applicableCountries}</span>` : ''}
+                            </a>
+                        `).join('')}
+                        ${exams.length === 0 ? '<span style="color:#666; font-size: 0.9rem;">No specific exams listed.</span>' : ''}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('modal-desc').innerHTML = html;
+            if (crs.link && crs.link !== "#") {
+                document.getElementById('modal-link').href = crs.link;
+                document.getElementById('modal-link').style.display = 'inline-block';
+            } else {
+                document.getElementById('modal-link').style.display = 'none';
+            }
+            document.getElementById('course-modal').style.display = 'flex';
+        }
+        
+        function closeModal() {
+            document.getElementById('course-modal').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
