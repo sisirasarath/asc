@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html><head>
+    <meta charset="utf-8">
+    <title>Dual Engine Automated Test Suite</title>
+</head>
+<body style="">
+<div id="test-log" style="font-family:monospace;white-space:pre;padding:20px;">[PASS] KTU 2024 Database loaded (54+ courses)
+[PASS] MACE Notes Database loaded (500+ verified files)
+[PASS] KTU 2024 renders S1 Branch Selection
+[PASS] MACE Notes renders S1 Branch Selection
+[PASS] MACE Notes includes Uncategorized Notes category
+[PASS] KTU S1 CSE lists official courses
+[PASS] KTU Course view renders all 5 syllabus modules
+[PASS] selectKtuCourse alias exists
+[PASS] ktuSem is now s3
+[PASS] maceSem remains isolated at s1
+[PASS] maceSem is now s5
+[PASS] ktuSem remains isolated at s3
+[PASS] MACE Branch view renders Data Science
+[PASS] maceCat is qp
+[PASS] Uncategorized branch renders correctly
+[PASS] PDF Modal opens with correct class
+[PASS] PDF Modal closes properly
+
+SUMMARY: 17 PASSED, 0 FAILED.
+</div>
+
+<!-- Include same DOM structure as notes.html -->
+<div id="notesSearch"></div>
+<button id="tab-ktu2024"></button>
+<button id="tab-mace"></button>
+<button id="tab-ktu"></button>
+<button id="tab-contribute"></button>
+
+<div id="panel-ktu2024">
+    <div id="ktu-sem-filters">
+        <button class="sem-btn" data-sem="s1"><span id="ktu-badge-s1">10 Subjects</span></button>
+        <button class="sem-btn" data-sem="s2"><span id="ktu-badge-s2">7 Subjects</span></button>
+        <button class="sem-btn active" data-sem="s3"><span id="ktu-badge-s3">7 Subjects</span></button>
+        <button class="sem-btn" data-sem="s4"><span id="ktu-badge-s4">6 Subjects</span></button>
+        <button class="sem-btn" data-sem="s5"><span id="ktu-badge-s5">9 Subjects</span></button>
+        <button class="sem-btn" data-sem="s6"><span id="ktu-badge-s6">7 Subjects</span></button>
+        <button class="sem-btn" data-sem="s7"><span id="ktu-badge-s7">6 Subjects</span></button>
+        <button class="sem-btn" data-sem="s8"><span id="ktu-badge-s8">2 Subjects</span></button>
+    </div>
+    <div id="ktu2024-content">
+    <div class="portal-breadcrumb-bar">
+      <span class="crumb-btn" onclick="filterKtuSem('s1')"><i class="fa-solid fa-graduation-cap"></i> KTU 2024 Scheme</span>
+      <span class="crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+      <span class="crumb-active"><i class="fa-solid fa-code-branch"></i> S3 Branch Selection</span>
+    </div>
+
+    <div class="sem-hero-card">
+      <div class="sem-hero-badge">S3</div>
+      <div class="sem-hero-info">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;flex-wrap:wrap;">
+          <span class="sem-badge-tag">OFFICIAL 2024 CURRICULUM</span>
+          <span style="font-size:0.78rem;color:var(--text-muted);"><i class="fa-solid fa-folder-tree" style="margin-right:4px;"></i> 7 Verified Subjects</span>
+        </div>
+        <h3>S3 — Semester 3</h3>
+        <p>Department core foundations and mathematical techniques.</p>
+      </div>
+      <div class="sem-hero-actions">
+        <a href="https://ktu.edu.in/academics/branchcurriculum/hardcoded-btech" target="_blank" rel="noopener" class="nbtn nbtn-p" style="border-radius:50px;padding:11px 22px;display:inline-flex;align-items:center;gap:8px;">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> ktu.edu.in Portal
+        </a>
+      </div>
+    </div>
+
+    <div class="section-divider-title">
+      <div>
+        <h2><i class="fa-solid fa-code-branch" style="color:var(--primary-red);"></i> S3 Applicable Branches</h2>
+        <p style="font-size:0.86rem;color:var(--text-muted);margin:4px 0 0 0;">Click your engineering branch to view its official subjects and module syllabi.</p>
+      </div>
+      <span class="count-pill">Strict Branch Mapping</span>
+    </div>
+    
+    <div class="branch-cat-grid">
+      <div class="branch-dept-card" onclick="selectKtuBranch('CSE')" title="Computer Science &amp; Engineering (CSE)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gCS%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%233730a3%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gCS)%22%2F%3E%3Crect%20x%3D%2260%22%20y%3D%2240%22%20width%3D%22280%22%20height%3D%22140%22%20rx%3D%2214%22%20fill%3D%22rgba(15%2C23%2C42%2C0.85)%22%20stroke%3D%22%236366f1%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%2285%22%20y%3D%2275%22%20font-family%3D%22monospace%22%20font-size%3D%2218%22%20fill%3D%22%2338bdf8%22%3E%26gt%3B%20class%20Student%20%7B%3C%2Ftext%3E%3Ctext%20x%3D%22110%22%20y%3D%22105%22%20font-family%3D%22monospace%22%20font-size%3D%2216%22%20fill%3D%22%23a5b4fc%22%3Ebranch%3A%20%22CSE_MACE%22%3B%3C%2Ftext%3E%3Ctext%20x%3D%22110%22%20y%3D%22130%22%20font-family%3D%22monospace%22%20font-size%3D%2216%22%20fill%3D%22%2334d399%22%3Escheme%3A%20%22KTU_2024%22%3B%3C%2Ftext%3E%3Ctext%20x%3D%2285%22%20y%3D%22158%22%20font-family%3D%22monospace%22%20font-size%3D%2218%22%20fill%3D%22%2338bdf8%22%3E%7D%3C%2Ftext%3E%3Ccircle%20cx%3D%22300%22%20cy%3D%22110%22%20r%3D%2226%22%20fill%3D%22rgba(99%2C102%2C241%2C0.25)%22%20stroke%3D%22%23818cf8%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M290%20100%20L300%20110%20L290%20120%20M310%20100%20L300%20110%20L310%20120%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%222.5%22%20fill%3D%22none%22%2F%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">CSE</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Computer Science</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-laptop-code"></i> 3 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('DS')" title="Data Science &amp; Analytics (DS)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gDS%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23155e75%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gDS)%22%2F%3E%3Cellipse%20cx%3D%22150%22%20cy%3D%2270%22%20rx%3D%2245%22%20ry%3D%2216%22%20fill%3D%22%230891b2%22%20stroke%3D%22%2322d3ee%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M105%2070%20v30%20c0%2010%2020%2016%2045%2016%20s45%20-6%2045%20-16%20v-30%22%20fill%3D%22%230e7490%22%20stroke%3D%22%2322d3ee%22%20stroke-width%3D%222%22%2F%3E%3Cpath%20d%3D%22M105%20100%20v30%20c0%2010%2020%2016%2045%2016%20s45%20-6%2045%20-16%20v-30%22%20fill%3D%22%23155e75%22%20stroke%3D%22%2322d3ee%22%20stroke-width%3D%222%22%2F%3E%3Crect%20x%3D%22230%22%20y%3D%22115%22%20width%3D%2220%22%20height%3D%2245%22%20fill%3D%22%2322d3ee%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22260%22%20y%3D%2290%22%20width%3D%2220%22%20height%3D%2270%22%20fill%3D%22%2338bdf8%22%20rx%3D%224%22%2F%3E%3Crect%20x%3D%22290%22%20y%3D%2265%22%20width%3D%2220%22%20height%3D%2295%22%20fill%3D%22%2306b6d4%22%20rx%3D%224%22%2F%3E%3Cpolyline%20points%3D%22230%2C110%20260%2C85%20290%2C60%22%20fill%3D%22none%22%20stroke%3D%22%23facc15%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22196%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23cffafe%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3EBIG%20DATA%20%26amp%3B%20ANALYTICS%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">DS</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Data Science</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-database"></i> 3 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('AI')" title="AI &amp; Machine Learning (AIML)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gAI%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23831843%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gAI)%22%2F%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%2280%22%20r%3D%2210%22%20fill%3D%22%23f472b6%22%2F%3E%3Ccircle%20cx%3D%22140%22%20cy%3D%22140%22%20r%3D%2210%22%20fill%3D%22%23f472b6%22%2F%3E%3Ccircle%20cx%3D%22210%22%20cy%3D%2260%22%20r%3D%2212%22%20fill%3D%22%23ec4899%22%2F%3E%3Ccircle%20cx%3D%22210%22%20cy%3D%22110%22%20r%3D%2212%22%20fill%3D%22%23ec4899%22%2F%3E%3Ccircle%20cx%3D%22210%22%20cy%3D%22160%22%20r%3D%2212%22%20fill%3D%22%23ec4899%22%2F%3E%3Ccircle%20cx%3D%22280%22%20cy%3D%22110%22%20r%3D%2214%22%20fill%3D%22%23fb7185%22%2F%3E%3Cline%20x1%3D%22140%22%20y1%3D%2280%22%20x2%3D%22210%22%20y2%3D%2260%22%20stroke%3D%22%23f472b6%22%20stroke-width%3D%222%22%20opacity%3D%220.6%22%2F%3E%3Cline%20x1%3D%22140%22%20y1%3D%2280%22%20x2%3D%22210%22%20y2%3D%22110%22%20stroke%3D%22%23f472b6%22%20stroke-width%3D%222%22%20opacity%3D%220.6%22%2F%3E%3Cline%20x1%3D%22140%22%20y1%3D%22140%22%20x2%3D%22210%22%20y2%3D%22110%22%20stroke%3D%22%23f472b6%22%20stroke-width%3D%222%22%20opacity%3D%220.6%22%2F%3E%3Cline%20x1%3D%22140%22%20y1%3D%22140%22%20x2%3D%22210%22%20y2%3D%22160%22%20stroke%3D%22%23f472b6%22%20stroke-width%3D%222%22%20opacity%3D%220.6%22%2F%3E%3Cline%20x1%3D%22210%22%20y1%3D%2260%22%20x2%3D%22280%22%20y2%3D%22110%22%20stroke%3D%22%23ec4899%22%20stroke-width%3D%222.5%22%20opacity%3D%220.8%22%2F%3E%3Cline%20x1%3D%22210%22%20y1%3D%22110%22%20x2%3D%22280%22%20y2%3D%22110%22%20stroke%3D%22%23ec4899%22%20stroke-width%3D%222.5%22%20opacity%3D%220.8%22%2F%3E%3Cline%20x1%3D%22210%22%20y1%3D%22160%22%20x2%3D%22280%22%20y2%3D%22110%22%20stroke%3D%22%23ec4899%22%20stroke-width%3D%222.5%22%20opacity%3D%220.8%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22198%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23fbcfe8%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3ENEURAL%20NETWORKS%20%26amp%3B%20AI%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">AI</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Artificial Intelligence</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-brain"></i> 3 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('ECE')" title="Electronics &amp; Communication Engg (ECE)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gEC%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%231e3a8a%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gEC)%22%2F%3E%3Crect%20x%3D%22140%22%20y%3D%2255%22%20width%3D%22120%22%20height%3D%22100%22%20rx%3D%2214%22%20fill%3D%22%231e40af%22%20stroke%3D%22%2360a5fa%22%20stroke-width%3D%222.5%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22112%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ffffff%22%20text-anchor%3D%22middle%22%3EVLSI%3C%2Ftext%3E%3Ctext%20x%3D%22200%22%20y%3D%22132%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2210%22%20font-weight%3D%22700%22%20fill%3D%22%2393c5fd%22%20letter-spacing%3D%222%22%20text-anchor%3D%22middle%22%3EMICROCHIP%3C%2Ftext%3E%3Cpath%20d%3D%22M120%2075%20h20%20M120%20105%20h20%20M120%20135%20h20%20M260%2075%20h20%20M260%20105%20h20%20M260%20135%20h20%20M170%2035%20v20%20M200%2035%20v20%20M230%2035%20v20%20M170%20155%20v20%20M200%20155%20v20%20M230%20155%20v20%22%20stroke%3D%22%2360a5fa%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%2F%3E%3Cpath%20d%3D%22M30%20110%20Q70%2070%20100%20110%20T140%20110%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20opacity%3D%220.7%22%2F%3E%3Cpath%20d%3D%22M260%20110%20Q300%20150%20330%20110%20T370%20110%22%20stroke%3D%22%2338bdf8%22%20stroke-width%3D%222%22%20fill%3D%22none%22%20opacity%3D%220.7%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22198%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23bfdbfe%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3ECIRCUITS%20%26amp%3B%20EMBEDDED%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">ECE</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Electronics &amp; Comm</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-microchip"></i> 2 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('EEE')" title="Electrical &amp; Electronics Engg (EEE)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gEE%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%2378350f%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gEE)%22%2F%3E%3Cpolygon%20points%3D%22205%2C35%20170%2C115%20205%2C115%20190%2C175%20235%2C95%20200%2C95%22%20fill%3D%22%23f59e0b%22%20stroke%3D%22%23fde68a%22%20stroke-width%3D%222%22%2F%3E%3Ccircle%20cx%3D%22110%22%20cy%3D%22110%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22rgba(245%2C158%2C11%2C0.4)%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ccircle%20cx%3D%22290%22%20cy%3D%22110%22%20r%3D%2232%22%20fill%3D%22none%22%20stroke%3D%22rgba(245%2C158%2C11%2C0.4)%22%20stroke-width%3D%222%22%20stroke-dasharray%3D%224%204%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22200%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23fef3c7%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3EPOWER%20SYSTEMS%20%26amp%3B%20GRIDS%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">EEE</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Electrical &amp; Electronics</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-bolt"></i> 2 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('MECH')" title="Mechanical Engineering (MECH)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gME%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237f1d1d%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gME)%22%2F%3E%3Ccircle%20cx%3D%22165%22%20cy%3D%22105%22%20r%3D%2242%22%20fill%3D%22none%22%20stroke%3D%22%23f87171%22%20stroke-width%3D%2212%22%2F%3E%3Ccircle%20cx%3D%22165%22%20cy%3D%22105%22%20r%3D%2222%22%20fill%3D%22%23ef4444%22%2F%3E%3Ccircle%20cx%3D%22245%22%20cy%3D%22125%22%20r%3D%2228%22%20fill%3D%22none%22%20stroke%3D%22%23fca5a5%22%20stroke-width%3D%229%22%2F%3E%3Ccircle%20cx%3D%22245%22%20cy%3D%22125%22%20r%3D%2214%22%20fill%3D%22%23dc2626%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22198%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23fee2e2%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3ETHERMAL%20%26amp%3B%20MACHINE%20DESIGN%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">MECH</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Mechanical Engg</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-gear"></i> 2 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div>
+      <div class="branch-dept-card" onclick="selectKtuBranch('CIVIL')" title="Civil Engineering (CIVIL)">
+        <div class="branch-dept-img" style="background-image:url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20400%20220%22%20width%3D%22100%25%22%20height%3D%22100%25%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gCE%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23064e3b%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23020617%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22400%22%20height%3D%22220%22%20fill%3D%22url(%23gCE)%22%2F%3E%3Cpath%20d%3D%22M80%20160%20L140%2060%20L200%20160%20Z%22%20fill%3D%22none%22%20stroke%3D%22%2334d399%22%20stroke-width%3D%223%22%2F%3E%3Cpath%20d%3D%22M180%20160%20L240%2075%20L300%20160%20Z%22%20fill%3D%22none%22%20stroke%3D%22%2310b981%22%20stroke-width%3D%223%22%2F%3E%3Cline%20x1%3D%2250%22%20y1%3D%22160%22%20x2%3D%22350%22%20y2%3D%22160%22%20stroke%3D%22%236ee7b7%22%20stroke-width%3D%223%22%2F%3E%3Cline%20x1%3D%22110%22%20y1%3D%22110%22%20x2%3D%22170%22%20y2%3D%22110%22%20stroke%3D%22%2334d399%22%20stroke-width%3D%222%22%2F%3E%3Cline%20x1%3D%22210%22%20y1%3D%22118%22%20x2%3D%22270%22%20y2%3D%22118%22%20stroke%3D%22%2310b981%22%20stroke-width%3D%222%22%2F%3E%3Ctext%20x%3D%22200%22%20y%3D%22198%22%20font-family%3D%22Arial%2Csans-serif%22%20font-size%3D%2214%22%20font-weight%3D%22800%22%20fill%3D%22%23d1fae5%22%20letter-spacing%3D%223%22%20text-anchor%3D%22middle%22%3ESTRUCTURES%20%26amp%3B%20GEOTECH%3C%2Ftext%3E%3C%2Fsvg%3E');">
+          <div class="branch-code-badge">CIVIL</div>
+        </div>
+        <div class="branch-dept-info">
+          <h3 class="branch-title-lg">Civil Engineering</h3>
+          <span class="branch-tag-pill"><i class="fa-solid fa-building"></i> 2 KTU SUBJECTS</span>
+          <span class="branch-cta-text"><i class="fa-solid fa-arrow-right"></i> View Subjects</span>
+        </div>
+      </div></div></div>
+</div>
+
+<div id="panel-mace">
+    <div id="mace-sem-filters">
+        <button class="sem-btn" data-sem="s1"><span id="mace-badge-s1">117</span></button>
+        <button class="sem-btn" data-sem="s2"><span id="mace-badge-s2">58</span></button>
+        <button class="sem-btn" data-sem="s3"><span id="mace-badge-s3">75</span></button>
+        <button class="sem-btn" data-sem="s4"><span id="mace-badge-s4">132</span></button>
+        <button class="sem-btn active" data-sem="s5"><span id="mace-badge-s5">51</span></button>
+        <button class="sem-btn" data-sem="s6"><span id="mace-badge-s6">33</span></button>
+        <button class="sem-btn" data-sem="s7"><span id="mace-badge-s7">22</span></button>
+        <button class="sem-btn" data-sem="s8"><span id="mace-badge-s8">19</span></button>
+    </div>
+    <div id="mace-cat-filters" style="display: flex;"></div>
+    <div id="mace-results-bar" style="display: flex;"></div>
+    <span id="mace-count">0</span>
+    <div id="mace-content">
+    <div id="mace-branch-anchor"></div>
+    <div class="portal-breadcrumb-bar">
+      <span class="crumb-btn" onclick="filterMaceSem('s5')"><i class="fa-solid fa-graduation-cap"></i> S5</span>
+      <span class="crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+      <span class="crumb-btn" onclick="clearMaceBranch()">Branches</span>
+      <span class="crumb-sep"><i class="fa-solid fa-chevron-right"></i></span>
+      <span class="crumb-active"><i class="fa-solid fa-folder-open"></i> Uncategorized &amp; General Notes</span>
+    </div>
+
+    <div class="branch-nav-header">
+      <button onclick="clearMaceBranch()" class="branch-back-btn"><i class="fa-solid fa-arrow-left"></i> Back to S5 Branches</button>
+      <span class="branch-breadcrumb">S5 · <strong style="color:white;">Uncategorized Notes</strong></span>
+    </div>
+
+    <div class="section-divider-title">
+      <div>
+        <h2><i class="fa-solid fa-folder-tree" style="color:var(--primary-red);"></i> S5 Uncategorized Notes Notes</h2>
+        <p style="font-size:0.86rem;color:var(--text-muted);margin:4px 0 0 0;">Browse verified study files from the MACE Google Drive repository.</p>
+      </div>
+      <a href="https://drive.google.com/drive/folders/14gJFSIAIDW73bqH2tzm-1TsCfXmVDKSa" target="_blank" rel="noopener" class="nbtn nbtn-g" style="border-radius:50px;padding:8px 18px;display:inline-flex;align-items:center;gap:6px;font-size:0.82rem;">
+        <i class="fa-brands fa-google-drive"></i> Open Folder in Drive
+      </a>
+    </div>
+      <div class="mace-empty" style="padding:3.5rem 1.5rem;text-align:center;">
+        <i class="fa-solid fa-folder-open" style="font-size:2.8rem;color:var(--text-muted);margin-bottom:12px;display:block;"></i>
+        <h3 style="color:white;margin-bottom:8px;">No notes found for S5 Uncategorized Notes under filter "all"</h3>
+        <p style="font-size:0.88rem;color:var(--text-muted);max-width:500px;margin:0 auto 1.5rem;">Access the master Google Drive folder or contribute notes for this subject.</p>
+        <button onclick="filterMaceCat('all')" class="nbtn nbtn-p" style="padding:10px 24px;border-radius:50px;display:inline-flex;">View All Notes</button>
+      </div></div>
+</div>
+
+<div id="panel-ktu"></div>
+<div id="panel-contribute"></div>
+
+<div id="pdfModal" class="">
+    <div id="pdfModalTitle">Test Document</div>
+    <a id="pdfOpenLink" href="https://drive.google.com/file/d/test/view"></a>
+    <div id="pdfModalLoading"></div>
+    <iframe id="pdfModalFrame" src=""></iframe>
+</div>
+
+<script src="../js/ktu-2024-curriculum-data.js"></script>
+<script src="../js/mace-notes-data.js"></script>
+<script src="../js/portal-dual-engine.js"></script>
+
+<script>
+const logEl = document.getElementById('test-log');
+let passed = 0, failed = 0;
+
+function assert(condition, testName) {
+    if (condition) {
+        passed++;
+        logEl.textContent += `[PASS] ${testName}\n`;
+    } else {
+        failed++;
+        logEl.textContent += `[FAIL] ${testName}\n`;
+    }
+}
+
+try {
+    // Test 1: Data arrays loaded
+    assert(typeof KTU_2024_CURRICULUM_DATA !== 'undefined' && KTU_2024_CURRICULUM_DATA.length >= 54, 'KTU 2024 Database loaded (54+ courses)');
+    assert(typeof MACE_PRELOADED_NOTES !== 'undefined' && MACE_PRELOADED_NOTES.length >= 500, 'MACE Notes Database loaded (500+ verified files)');
+
+    // Test 2: Initial Render
+    renderKtu2024();
+    renderMaceNotes();
+    const ktuContent = document.getElementById('ktu2024-content').innerHTML;
+    const maceContent = document.getElementById('mace-content').innerHTML;
+    assert(ktuContent.includes('S1 Branch Selection'), 'KTU 2024 renders S1 Branch Selection');
+    assert(maceContent.includes('S1 Branch Selection'), 'MACE Notes renders S1 Branch Selection');
+    assert(maceContent.includes('Uncategorized Notes'), 'MACE Notes includes Uncategorized Notes category');
+
+    // Test 3: KTU Branch Navigation
+    selectKtuBranch('CSE');
+    const cseContent = document.getElementById('ktu2024-content').innerHTML;
+    assert(cseContent.includes('GAMAT101') || cseContent.includes('Mathematics'), 'KTU S1 CSE lists official courses');
+
+    // Test 4: Course Syllabus View
+    selectKtuSubject('GAMAT101');
+    const courseContent = document.getElementById('ktu2024-content').innerHTML;
+    assert(courseContent.includes('Module 1') && courseContent.includes('Module 5'), 'KTU Course view renders all 5 syllabus modules');
+    assert(typeof selectKtuCourse === 'function', 'selectKtuCourse alias exists');
+
+    // Test 5: Independent Filter Isolation
+    // Changing KTU semester to S3 should NOT alter MACE semester (which should remain S1)
+    filterKtuSem('s3');
+    assert(ktuSem === 's3', 'ktuSem is now s3');
+    assert(maceSem === 's1', 'maceSem remains isolated at s1');
+
+    // Changing MACE semester to S5 should NOT alter KTU semester (which should remain S3)
+    filterMaceSem('s5');
+    assert(maceSem === 's5', 'maceSem is now s5');
+    assert(ktuSem === 's3', 'ktuSem remains isolated at s3');
+
+    // Test 6: MACE Branch Navigation
+    selectMaceBranch('DS');
+    const dsMace = document.getElementById('mace-content').innerHTML;
+    assert(dsMace.includes('Data Science') || dsMace.includes('DS'), 'MACE Branch view renders Data Science');
+
+    // Test 7: MACE Category Filtering
+    filterMaceCat('qp');
+    assert(maceCat === 'qp', 'maceCat is qp');
+
+    // Test 8: Uncategorized Notes Branch Selection
+    selectMaceBranch('UNCATEGORIZED');
+    const uncatHtml = document.getElementById('mace-content').innerHTML;
+    assert(uncatHtml.includes('Uncategorized Notes') || uncatHtml.includes('General'), 'Uncategorized branch renders correctly');
+
+    // Test 9: PDF Modal
+    openPdfModal('https://drive.google.com/file/d/test/preview', 'https://drive.google.com/file/d/test/view', 'Test Document');
+    assert(document.getElementById('pdfModal').classList.contains('open'), 'PDF Modal opens with correct class');
+    closePdfModal();
+    assert(!document.getElementById('pdfModal').classList.contains('open'), 'PDF Modal closes properly');
+
+    logEl.textContent += `\nSUMMARY: ${passed} PASSED, ${failed} FAILED.\n`;
+} catch (err) {
+    failed++;
+    logEl.textContent += `[ERROR] Unexpected error: ${err.message}\nStack: ${err.stack}\n`;
+}
+</script>
+
+
+</body></html>

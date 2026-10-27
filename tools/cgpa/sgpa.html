@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="../../images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KTU SGPA & CGPA Calculator | MACE Academic Support Cell</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="KTU SGPA & CGPA Calculator | MACE Academic Support Cell">
+    <meta name="description" content="Calculate your KTU B.Tech semester SGPA and cumulative CGPA instantly for 2024 & 2019 scheme courses.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../../styles.css">
+    
+    <style>
+        .calc-wrapper { max-width: 900px; margin: 40px auto 80px; width: 92%; }
+        
+        .mode-switch {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            border-radius: 50px;
+            padding: 5px;
+            margin-bottom: 2rem;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(15px);
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            border: none;
+            background: transparent;
+            color: #ccc;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 0.95rem;
+        }
+        .mode-btn.active {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 4px 15px var(--primary-red-glow);
+        }
+
+        .calc-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            padding: 2.5rem;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            text-align: left;
+        }
+
+        .select-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 2rem;
+        }
+        .select-group label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .select-field {
+            width: 100%;
+            height: 48px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-glass);
+            color: white;
+            padding: 0 15px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: 0.3s;
+        }
+        .select-field:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 15px var(--primary-red-glow);
+        }
+
+        .subject-row {
+            display: grid;
+            grid-template-columns: 3fr 1fr 1.5fr;
+            gap: 15px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        .subject-name {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: white;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .subject-credits {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-glass);
+            border-radius: 10px;
+            padding: 12px;
+            color: var(--text-muted);
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        /* Result Display Box */
+        .result-box {
+            background: linear-gradient(135deg, rgba(229,26,36,0.1), rgba(0,0,0,0.4));
+            border: 1px solid var(--primary-red);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(229,26,36,0.15);
+        }
+        .result-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: white;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: var(--font-heading);
+        }
+        .result-sub {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        @media (max-width: 600px) {
+            .subject-row { grid-template-columns: 1fr; gap: 8px; }
+            .calc-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="../../index.html" class="logo">
+                <img src="../../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../../index.html">Home</a></li>
+                <li><a href="../../academics.html">Academics</a></li>
+                <li><a href="../../notes.html">Notes</a></li>
+                <li><a href="../../career.html">Career</a></li>
+                <li><a href="../../scholarship.html">Scholarship</a></li>
+                <li><a href="../../support.html">Support</a></li>
+                <li><a href="../../tools.html" class="active">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../academics.html">Academics</a></li>
+            <li><a href="../../notes.html">Notes</a></li>
+            <li><a href="../../career.html">Career</a></li>
+            <li><a href="../../scholarship.html">Scholarship</a></li>
+            <li><a href="../../support.html">Support</a></li>
+            <li><a href="../../tools.html" class="active">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <div style="padding-top: 110px;">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <a href="../../tools.html" class="btn btn-secondary" style="font-size: 0.85rem;"><i class="fa-solid fa-arrow-left"></i> Back to Tools</a>
+            </div>
+
+            <div class="section-header scroll-reveal" style="text-align: center; margin-bottom: 30px;">
+                <div class="section-badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-calculator"></i> KTU ACADEMIC SUITE</div>
+                <h2>KTU GPA <span class="gradient-text">Calculator</span></h2>
+                <p>2024 & 2019 Scheme · All Engineering Branches · S1 – S8</p>
+                <div class="red-divider"></div>
+            </div>
+
+            <!-- Mode Switcher -->
+            <div class="mode-switch">
+                <button class="mode-btn active" id="mode-sgpa-btn" onclick="setMode('sgpa')">SGPA Calculator</button>
+                <button class="mode-btn" id="mode-cgpa-btn" onclick="setMode('cgpa')">CGPA Calculator</button>
+            </div>
+
+            <div class="calc-wrapper">
+                
+                <!-- SGPA MODE -->
+                <div id="sgpa-mode" class="calc-card">
+                    <div class="select-row">
+                        <div class="select-group">
+                            <label for="dept-select">Branch / Department</label>
+                            <select id="dept-select" class="select-field" onchange="onSelectionChange()">
+                                <option value="">— Select Branch —</option>
+                                <option value="CSE">Computer Science & Engineering (CSE)</option>
+                                <option value="ECE">Electronics & Communication (ECE)</option>
+                                <option value="EEE">Electrical & Electronics (EEE)</option>
+                                <option value="ME">Mechanical Engineering (ME)</option>
+                                <option value="CE">Civil Engineering (CE)</option>
+                                <option value="AEI">Applied Electronics & Inst (AEI)</option>
+                                <option value="IE">Industrial Engineering (IE)</option>
+                                <option value="ARCHI">Architecture (B.Arch)</option>
+                            </select>
+                        </div>
+
+                        <div class="select-group">
+                            <label for="sem-select">Semester</label>
+                            <select id="sem-select" class="select-field" onchange="onSelectionChange()">
+                                <option value="">— Select Semester —</option>
+                                <option value="s1">Semester 1 (S1)</option>
+                                <option value="s2">Semester 2 (S2)</option>
+                                <option value="s3">Semester 3 (S3)</option>
+                                <option value="s4">Semester 4 (S4)</option>
+                                <option value="s5">Semester 5 (S5)</option>
+                                <option value="s6">Semester 6 (S6)</option>
+                                <option value="s7">Semester 7 (S7)</option>
+                                <option value="s8">Semester 8 (S8)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="subject-rows-container">
+                        <div style="text-align: center; color: var(--text-muted); padding: 40px; border: 1px dashed var(--border-glass); border-radius: 16px;">
+                            <i class="fa-solid fa-calculator" style="font-size: 2rem; color: rgba(255,255,255,0.1); margin-bottom: 12px; display: block;"></i>
+                            Please select both Branch and Semester above to load subjects.
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="calculateSGPA()" style="flex:1;">Calculate SGPA <i class="fa-solid fa-calculator"></i></button>
+                        <button class="btn btn-secondary" onclick="resetSGPA()">Reset</button>
+                    </div>
+
+                    <div id="sgpa-result-box" class="result-box" style="display: none;">
+                        <div class="result-sub">YOUR SEMESTER GPA</div>
+                        <div class="result-value" id="sgpa-value">0.00</div>
+                        <div class="result-sub" id="sgpa-status">Great Performance!</div>
+                    </div>
+                </div>
+
+                <!-- CGPA MODE -->
+                <div id="cgpa-mode" class="calc-card" style="display: none;">
+                    <h3 style="color: white; font-size: 1.3rem; margin-bottom: 1.5rem; border-left: 3px solid var(--primary-red); padding-left: 12px;">Cumulative Grade Point Average (CGPA)</h3>
+                    <p style="color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem;">Enter your earned SGPA for completed semesters to calculate overall CGPA:</p>
+
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;" id="cgpa-inputs-grid">
+                        <!-- S1 to S8 inputs generated dynamically -->
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 2rem;">
+                        <button class="btn btn-primary" onclick="calculateCGPA()" style="flex:1;">Calculate Overall CGPA <i class="fa-solid fa-chart-line"></i></button>
+                        <button class="btn btn-secondary" onclick="resetCGPA()">Reset</button>
+                    </div>
+
+                    <div id="cgpa-result-box" class="result-box" style="display: none;">
+                        <div class="result-sub">CUMULATIVE CGPA</div>
+                        <div class="result-value" id="cgpa-value">0.00</div>
+                        <div class="result-sub" id="cgpa-status">Overall KTU Rating</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none;">
+                <p>© SFI MACE 2026. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../../js/main.js"></script>
+    <script src="../../js/canvas-bg.js"></script>
+
+    <script>
+        const gradePoints = { "S": 10.0, "A+": 9.0, "A": 8.5, "B+": 8.0, "B": 7.5, "C+": 7.0, "C": 6.5, "D": 6.0, "P": 5.5, "F": 0.0 };
+        
+        const sampleSubjects = [
+            { name: "Mathematics For Engineering", credits: 4 },
+            { name: "Chemistry / Physics + Lab", credits: 4 },
+            { name: "Algorithmic Thinking / Programming", credits: 4 },
+            { name: "Engineering Graphics / Mechanics", credits: 3 },
+            { name: "Basic Electrical & Electronics", credits: 4 },
+            { name: "Life Skills & Communication", credits: 2 }
+        ];
+
+        function setMode(mode) {
+            if (mode === 'sgpa') {
+                document.getElementById('sgpa-mode').style.display = 'block';
+                document.getElementById('cgpa-mode').style.display = 'none';
+                document.getElementById('mode-sgpa-btn').classList.add('active');
+                document.getElementById('mode-cgpa-btn').classList.remove('active');
+            } else {
+                document.getElementById('sgpa-mode').style.display = 'none';
+                document.getElementById('cgpa-mode').style.display = 'block';
+                document.getElementById('mode-sgpa-btn').classList.remove('active');
+                document.getElementById('mode-cgpa-btn').classList.add('active');
+                buildCGPAInputs();
+            }
+        }
+
+        function onSelectionChange() {
+            const branch = document.getElementById('dept-select').value;
+            const sem = document.getElementById('sem-select').value;
+            const container = document.getElementById('subject-rows-container');
+
+            if (!branch || !sem) {
+                container.innerHTML = `
+                    <div style="text-align: center; color: var(--text-muted); padding: 40px; border: 1px dashed var(--border-glass); border-radius: 16px;">
+                        <i class="fa-solid fa-calculator" style="font-size: 2rem; color: rgba(255,255,255,0.1); margin-bottom: 12px; display: block;"></i>
+                        Please select both Branch and Semester above to load subjects.
+                    </div>
+                `;
+                return;
+            }
+
+            let gradeOptions = `<option value="">Select Grade</option>`;
+            for (let g in gradePoints) {
+                gradeOptions += `<option value="${g}">${g} (GP: ${gradePoints[g].toFixed(1)})</option>`;
+            }
+
+            container.innerHTML = sampleSubjects.map((s, idx) => `
+                <div class="subject-row">
+                    <div class="subject-name" title="${s.name}">${s.name}</div>
+                    <div class="subject-credits">${s.credits} Credits</div>
+                    <select class="select-field sgpa-grade-select" data-credits="${s.credits}">
+                        ${gradeOptions}
+                    </select>
+                </div>
+            `).join('');
+        }
+
+        function calculateSGPA() {
+            const selects = document.querySelectorAll('.sgpa-grade-select');
+            if (selects.length === 0) return;
+
+            let totalCredits = 0;
+            let weightedPoints = 0;
+            let count = 0;
+
+            selects.forEach(sel => {
+                const grade = sel.value;
+                const credits = parseFloat(sel.getAttribute('data-credits')) || 0;
+                if (grade && gradePoints[grade] !== undefined) {
+                    weightedPoints += gradePoints[grade] * credits;
+                    totalCredits += credits;
+                    count++;
+                }
+            });
+
+            if (totalCredits === 0) {
+                alert("Please select grades for your subjects first.");
+                return;
+            }
+
+            const sgpa = (weightedPoints / totalCredits).toFixed(2);
+            document.getElementById('sgpa-value').innerText = sgpa;
+            
+            let status = "First Class with Distinction";
+            if (sgpa < 6.0) status = "Re-evaluation Recommended";
+            else if (sgpa < 7.5) status = "Second Class";
+            else if (sgpa < 8.5) status = "First Class";
+
+            document.getElementById('sgpa-status').innerText = status;
+            document.getElementById('sgpa-result-box').style.display = 'block';
+        }
+
+        function resetSGPA() {
+            document.querySelectorAll('.sgpa-grade-select').forEach(s => s.value = '');
+            document.getElementById('sgpa-result-box').style.display = 'none';
+        }
+
+        function buildCGPAInputs() {
+            const grid = document.getElementById('cgpa-inputs-grid');
+            if (grid.children.length > 0) return;
+
+            let html = '';
+            for (let i = 1; i <= 8; i++) {
+                html += `
+                    <div style="background: rgba(255,255,255,0.02); padding: 12px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <label style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; display: block; margin-bottom: 5px;">S${i} SGPA</label>
+                        <input type="number" step="0.01" min="0" max="10" placeholder="e.g. 8.5" class="select-field cgpa-sem-input" id="cgpa-s${i}" style="height: 40px;">
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+        }
+
+        function calculateCGPA() {
+            const inputs = document.querySelectorAll('.cgpa-sem-input');
+            let sum = 0;
+            let count = 0;
+
+            inputs.forEach(inp => {
+                const val = parseFloat(inp.value);
+                if (!isNaN(val) && val >= 0 && val <= 10) {
+                    sum += val;
+                    count++;
+                }
+            });
+
+            if (count === 0) {
+                alert("Please enter SGPA for at least one semester.");
+                return;
+            }
+
+            const cgpa = (sum / count).toFixed(2);
+            document.getElementById('cgpa-value').innerText = cgpa;
+            document.getElementById('cgpa-status').innerText = `Calculated across ${count} semester(s)`;
+            document.getElementById('cgpa-result-box').style.display = 'block';
+        }
+
+        function resetCGPA() {
+            document.querySelectorAll('.cgpa-sem-input').forEach(i => i.value = '');
+            document.getElementById('cgpa-result-box').style.display = 'none';
+        }
+    </script>
+    <script src="../../js/main.js"></script>
+</body>
+</html>

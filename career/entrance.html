@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="../images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrance Exams Directory | MACE Academic Support Cell</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="title" content="Entrance Exams Directory | MACE Academic Support Cell">
+    <meta name="description" content="Complete guide to national and state level engineering entrance exams (GATE, CAT, GRE, ESE, UPSC, AFCAT, etc.) for MACE students.">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        .search-box { position: relative; max-width: 500px; width: 100%; margin: 0 auto 2.5rem; }
+        .search-box input { width: 100%; padding: 14px 20px 14px 50px; background: rgba(255,255,255,0.04); border: 1px solid var(--border-glass); border-radius: 50px; color: white; font-size: 1rem; outline: none; transition: 0.3s; backdrop-filter: blur(15px); }
+        .search-box input:focus { border-color: var(--primary-red); box-shadow: 0 0 20px var(--primary-red-glow); }
+        .search-box i { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--primary-red); font-size: 1.1rem; }
+
+        .explorer-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; margin-bottom: 80px; }
+        
+        .course-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(15px);
+            text-align: left;
+            position: relative;
+        }
+        .course-card:hover { transform: translateY(-8px); border-color: var(--primary-red); box-shadow: 0 15px 40px rgba(229,26,36,0.15); }
+        
+        .card-img-wrap { height: 160px; position: relative; background-size: cover; background-position: center; border-bottom: 1px solid var(--border-glass); }
+        .card-badge { position: absolute; bottom: 10px; left: 10px; }
+        
+        .card-body { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; gap: 12px; }
+        .card-title { font-size: 1.25rem; font-weight: 800; color: white; margin: 0; line-height: 1.3; }
+        
+        .tag-stack { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+        .tag { background: rgba(229, 26, 36, 0.15); color: var(--primary-red); padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(229,26,36,0.3); }
+
+        /* Modal Styles */
+        #course-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-content { background: #111; border: 1px solid var(--border-glass); border-radius: 24px; width: 100%; max-width: 650px; display: flex; flex-direction: column; overflow: hidden; position: relative; max-height: 90vh; }
+        .modal-img { height: 220px; background-size: cover; background-position: center; position: relative; }
+        .modal-details { padding: 30px; overflow-y: auto; text-align: left; }
+        .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.6); border: none; color: white; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: var(--primary-red); }
+        .modal-title { font-size: 1.6rem; color: white; margin-bottom: 10px; font-weight: 800; }
+        .modal-desc { color: #ccc; font-size: 0.95rem; line-height: 1.6; margin-bottom: 25px; }
+        .modal-action { display: block; background: var(--primary-red); color: white; padding: 15px; border-radius: 12px; text-decoration: none; text-align: center; font-weight: 800; transition: 0.3s; box-shadow: 0 5px 20px var(--primary-red-glow); text-transform: uppercase; letter-spacing: 1px; }
+        .modal-action:hover { transform: translateY(-3px); box-shadow: 0 8px 30px var(--primary-red-glow); }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../academics.html">Academics</a></li>
+                <li><a href="../notes.html">Notes</a></li>
+                <li><a href="../career.html" class="active">Career</a></li>
+                <li><a href="../scholarship.html">Scholarship</a></li>
+                <li><a href="../support.html">Support</a></li>
+                <li><a href="../tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../academics.html">Academics</a></li>
+            <li><a href="../notes.html">Notes</a></li>
+            <li><a href="../career.html" class="active">Career</a></li>
+            <li><a href="../scholarship.html">Scholarship</a></li>
+            <li><a href="../support.html">Support</a></li>
+            <li><a href="../tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner">
+        <div class="container">
+            <div class="page-banner-content scroll-reveal" style="max-width: 900px; margin: 0 auto; text-align: center;">
+                <div style="font-family: monospace; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1rem;">
+                    <a href="../career.html" style="color:var(--primary-red); text-decoration:none;">CAREER HUB</a> &gt; <a href="higher-education.html" style="color:var(--primary-red); text-decoration:none;">HIGHER ED</a> &gt; ENTRANCE EXAMS
+                </div>
+                <div class="section-badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-file-pen"></i> ENTRANCE DIRECTORY</div>
+                <h1>Entrance Exams <span class="gradient-text">Directory</span></h1>
+                <p>Post-Graduation, PSU Recruitment, Defence, & Management Entrance Examinations Guide.</p>
+                <div class="red-divider"></div>
+                <div style="margin-top: 1.5rem;">
+                    <a href="higher-education.html" class="btn btn-secondary" style="font-size: 0.85rem;"><i class="fa-solid fa-arrow-left"></i> Back to Higher Education</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section style="padding: 40px 0 80px;">
+        <div class="container">
+
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="exam-search" placeholder="Search GATE, CAT, GRE, UPSC, ESE..." onkeyup="filterExams()">
+            </div>
+            
+            <div id="exams-container" class="explorer-grid">
+                <div style="text-align: center; padding: 4rem 0; color: var(--text-muted); grid-column: 1/-1;">
+                    <i class="fa-solid fa-circle-notch fa-spin" style="font-size: 1.8rem; color: var(--primary-red); margin-bottom: 1rem; display: block; margin-left: auto; margin-right: auto;"></i>
+                    Loading entrance exams...
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Glass Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand scroll-reveal">
+                    <div class="footer-brand-title">
+                        <img src="../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+                        <h2 style="font-size: 1.25rem;">SFI <span class="gradient-text">SUPPORT CELL</span></h2>
+                    </div>
+                    <p>An initiative by SFI MACE Unit. Empowering students through guidance and resources.</p>
+                </div>
+                <div class="footer-links scroll-reveal">
+                    <h3>Quick Links</h3>
+                    <a href="../index.html">Home</a>
+                    <a href="../academics.html">Academics</a>
+                    <a href="../career.html">Career</a>
+                    <a href="../scholarship.html">Scholarship</a>
+                    <a href="../tools.html">Tools</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal -->
+    <div id="course-modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-img" id="modal-img"></div>
+            <div class="modal-details">
+                <h2 class="modal-title" id="modal-title">Exam Name</h2>
+                <div class="modal-desc" id="modal-desc">Description</div>
+                <a href="#" target="_blank" class="modal-action" id="modal-link">Go to Official Portal <i class="fa-solid fa-arrow-up-right-from-square" style="margin-left:8px;"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/canvas-bg.js"></script>
+    <script src="../js/storage.js"></script>
+
+    <script>
+        let allExams = [];
+
+        async function initExams() {
+            if (window.SFI_STORAGE && window.SFI_STORAGE.fetchLiveR2Data) {
+                await window.SFI_STORAGE.fetchLiveR2Data();
+            }
+
+            const data = window.SFI_STORAGE ? window.SFI_STORAGE.getData() : {};
+            allExams = data.entrance_exams || [];
+
+            if (allExams.length === 0) {
+                // Fetch directly from database.json if empty
+                try {
+                    const res = await fetch("../js/database.json");
+                    const json = await res.json();
+                    allExams = json.entrance_exams || [];
+                } catch(e) {
+                    console.error("Error fetching database.json", e);
+                }
+            }
+
+            renderExams(allExams);
+        }
+
+        window.addEventListener('load', initExams);
+        document.addEventListener('DOMContentLoaded', initExams);
+
+        function renderExams(examsList) {
+            const container = document.getElementById('exams-container');
+            if (!container) return;
+
+            if (examsList.length === 0) {
+                container.innerHTML = '<p style="color:#888; text-align:center; padding: 3rem; grid-column: 1/-1;">No entrance exams matched your search query.</p>';
+                return;
+            }
+
+            const today = new Date();
+            today.setHours(0,0,0,0);
+
+            const processedExams = examsList.map(e => {
+                let status = 'UPCOMING';
+                let daysRemaining = Infinity;
+                
+                if (e.notStarted) {
+                    status = 'NOT_STARTED';
+                } else if (!e.deadline) {
+                    status = 'NO_DEADLINE';
+                } else {
+                    const d = new Date(e.deadline);
+                    daysRemaining = Math.ceil((d - today) / (1000 * 60 * 60 * 24));
+                    if (daysRemaining < 0) {
+                        status = 'CLOSED';
+                    }
+                }
+                return { ...e, status, daysRemaining };
+            });
+
+            processedExams.sort((a, b) => {
+                const rank = { 'UPCOMING': 1, 'NO_DEADLINE': 2, 'CLOSED': 3, 'NOT_STARTED': 4 };
+                if (rank[a.status] !== rank[b.status]) return rank[a.status] - rank[b.status];
+                if (a.status === 'UPCOMING') return a.daysRemaining - b.daysRemaining;
+                return 0;
+            });
+
+            container.innerHTML = processedExams.map(e => {
+                let badge = '';
+                let border = 'border: 1px solid var(--border-glass);';
+                
+                if (e.status === 'NOT_STARTED') {
+                    badge = `<span style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; color: #ccc;"><i class="fa-regular fa-clock"></i> Not Yet Started</span>`;
+                } else if (e.status === 'CLOSED') {
+                    badge = `<span style="background: rgba(229,26,36,0.2); padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; color: var(--primary-red); border: 1px solid rgba(229,26,36,0.3);"><i class="fa-solid fa-lock"></i> Closed (${e.deadline})</span>`;
+                    border = 'border: 1px solid rgba(229,26,36,0.3); opacity: 0.75;';
+                } else if (e.status === 'UPCOMING') {
+                    let color = e.daysRemaining <= 7 ? 'var(--primary-red)' : '#4ade80';
+                    badge = `<span style="background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; color: ${color}; font-weight:700;"><i class="fa-solid fa-hourglass-half"></i> Deadline: ${e.deadline}</span>`;
+                    if (e.daysRemaining <= 7) border = `border: 1px solid var(--primary-red); box-shadow: 0 0 15px var(--primary-red-glow);`;
+                } else if (e.status === 'NO_DEADLINE') {
+                    badge = `<span style="background: rgba(0,0,0,0.7); padding: 5px 10px; border-radius: 8px; font-size: 0.75rem; color: #4ade80; font-weight:700;"><i class="fa-solid fa-calendar-check"></i> Open / Active</span>`;
+                }
+
+                return `
+                <div class="course-card" style="${border}">
+                    <div class="card-img-wrap" style="background-image: url('${e.image || 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=1000'}');">
+                        <div class="card-badge">${badge}</div>
+                    </div>
+                    <div class="card-body">
+                        <h3 class="card-title">${e.name}</h3>
+                        <div class="tag-stack">
+                            ${(e.categories || '').split(',').map(c => c.trim()).filter(Boolean).slice(0, 2).map(c => `<span class="tag">${c}</span>`).join('')}
+                        </div>
+                        <button onclick="openExamModal('${e.id}')" class="btn btn-secondary" style="margin-top: auto; border-radius: 10px; font-size: 0.85rem; padding: 10px; width: 100%;">
+                            View Details <i class="fa-solid fa-arrow-right" style="margin-left: 5px;"></i>
+                        </button>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        function openExamModal(id) {
+            const exam = allExams.find(e => e.id === id);
+            if (!exam) return;
+
+            document.getElementById('modal-title').innerText = exam.name;
+            const imgEl = document.getElementById('modal-img');
+            if (exam.image) {
+                imgEl.style.backgroundImage = `url('${exam.image}')`;
+                imgEl.style.display = 'block';
+            } else {
+                imgEl.style.display = 'none';
+            }
+
+            document.getElementById('modal-desc').innerHTML = `
+                <div style="margin-bottom: 20px; line-height: 1.7; color: #ddd; font-size: 1rem;">${exam.description || 'No detailed description provided.'}</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; margin-bottom: 20px;">
+                    <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <strong style="color: var(--primary-red); font-size: 0.9rem; display: block; margin-bottom: 5px;"><i class="fa-solid fa-layer-group"></i> Focus Areas</strong>
+                        <span style="color: #eee; font-size: 0.95rem;">${exam.categories || 'Engineering'}</span>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.03); padding: 16px; border-radius: 12px; border: 1px solid var(--border-glass);">
+                        <strong style="color: var(--primary-red); font-size: 0.9rem; display: block; margin-bottom: 5px;"><i class="fa-solid fa-users"></i> Eligibility</strong>
+                        <span style="color: #eee; font-size: 0.95rem;">${exam.eligibleYears || 'B.Tech Students / Graduates'}</span>
+                    </div>
+                </div>
+            `;
+
+            const linkEl = document.getElementById('modal-link');
+            if (exam.applyLink) {
+                linkEl.href = exam.applyLink;
+                linkEl.style.display = 'block';
+            } else {
+                linkEl.style.display = 'none';
+            }
+
+            document.getElementById('course-modal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('course-modal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function filterExams() {
+            const query = document.getElementById('exam-search').value.toLowerCase().trim();
+            if (!query) {
+                renderExams(allExams);
+                return;
+            }
+
+            const filtered = allExams.filter(e => {
+                const nMatch = e.name && e.name.toLowerCase().includes(query);
+                const cMatch = e.categories && e.categories.toLowerCase().includes(query);
+                const dMatch = e.description && e.description.toLowerCase().includes(query);
+                return nMatch || cMatch || dMatch;
+            });
+
+            renderExams(filtered);
+        }
+    </script>
+</body>
+</html>

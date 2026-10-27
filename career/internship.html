@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/jpeg" href="../images/asc_logo.jpg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Hub | MACE Academic Support Cell</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="../styles.css">
+    
+    <style>
+        /* Custom Overrides for Internship Hub */
+        .intern-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+            margin-bottom: 80px;
+        }
+
+        /* Search Bar Styling */
+        .search-container { max-width: 700px; margin: 0 auto 2.5rem; position: relative; z-index: 100; }
+        .search-input-wrapper {
+            position: relative; background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass); border-radius: 50px;
+            padding: 5px; backdrop-filter: blur(15px);
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .search-input-wrapper:focus-within {
+            border-color: var(--primary-red); box-shadow: 0 0 30px var(--primary-red-glow); transform: translateY(-5px);
+        }
+        .search-input-wrapper i { position: absolute; left: 25px; top: 50%; transform: translateY(-50%); color: var(--primary-red); font-size: 1.1rem; }
+        .search-input { width: 100%; background: transparent; border: none; padding: 15px 25px 15px 60px; color: white; font-size: 1rem; outline: none; box-sizing: border-box;}
+        .search-input::placeholder { color: var(--text-muted); opacity: 0.3; }
+
+        .intern-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            backdrop-filter: blur(15px);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+        .intern-card:hover { transform: translateY(-10px); border-color: var(--primary-red); box-shadow: 0 15px 40px rgba(229,26,36,0.15); }
+        
+        .intern-img-box { height: 180px; width: 100%; background-size: cover; background-position: center; position: relative; }
+        
+        .intern-badge-stack {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: flex-end;
+            z-index: 5;
+        }
+        .badge { padding: 5px 15px; border-radius: 50px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; }
+        .badge.category { background: rgba(255, 75, 75, 0.2); color: var(--primary-red); border: 1px solid rgba(255, 75, 75, 0.3); }
+        .badge.latest { background: rgba(0, 255, 136, 0.2); color: #00ff88; border: 1px solid rgba(0, 255, 136, 0.3); }
+
+        .intern-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; }
+        .intern-company { color: var(--primary-red); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .intern-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.5rem; color: white; line-height: 1.2; }
+        .intern-deadline { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px; }
+        
+        .intern-footer { display: flex; gap: 10px; margin-top: auto; }
+        .intern-btn { flex: 1; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 0.85rem; cursor: pointer; text-align: center; border: none; transition: 0.3s; text-decoration: none; }
+        .btn-view { background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--border-glass); }
+        .btn-view:hover { background: rgba(255,255,255,0.1); }
+        .btn-apply { background: var(--primary-red); color: white; box-shadow: 0 4px 15px var(--primary-red-glow); }
+        .btn-apply:hover { transform: scale(1.02); }
+
+        /* Modal Styles */
+        .sch-popup { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 5000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(20px); padding: 2rem; }
+        .popup-card { background: #111; border: 1px solid var(--border-glass); border-radius: 30px; width: 100%; max-width: 800px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .popup-close { position: absolute; top: 20px; right: 25px; font-size: 2.5rem; cursor: pointer; color: var(--text-muted); z-index: 10; }
+        .popup-header { height: 250px; background-size: cover; background-position: center; position: relative; }
+        .popup-header::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, #111); }
+        .popup-body { padding: 3rem; }
+        
+        .detail-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 20px; border: 1px solid var(--border-glass); }
+        .detail-item { display: flex; flex-direction: column; gap: 5px; }
+        .detail-item span:first-child { font-size: 0.75rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
+        .detail-item span:last-child { font-size: 1rem; color: white; font-weight: 600; }
+        
+        .intern-description { color: #ccc; line-height: 1.8; font-size: 1rem; }
+        .intern-description h1, .intern-description h2, .intern-description h3 { color: white; margin-top: 1.5rem; margin-bottom: 1rem; }
+        .intern-description ul { padding-left: 1.2rem; margin-bottom: 1.5rem; }
+        .intern-description li { margin-bottom: 0.5rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Background & Glow Orbs -->
+    <div class="bg-glow-container">
+        <div class="glow-orb orb-1"></div>
+        <div class="glow-orb orb-2"></div>
+        <div class="glow-orb orb-3"></div>
+    </div>
+    <canvas id="bg-canvas"></canvas>
+
+    <!-- Glass Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="../index.html" class="logo">
+                <img src="../images/asc_logo.jpg" alt="SFI Logo" style="width:48px;height:48px;object-fit:cover;border-radius:50%;flex-shrink:0;">
+                <div class="logo-text">
+                    <h1>ACADEMIC <span class="gradient-text">SUPPORT CELL</span></h1>
+                    <span>AN INITIATIVE BY SFI MACE UNIT</span>
+                </div>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../academics.html">Academics</a></li>
+                <li><a href="../notes.html">Notes</a></li>
+                <li><a href="../career.html" class="active">Career</a></li>
+                <li><a href="../scholarship.html">Scholarship</a></li>
+                <li><a href="../support.html">Support</a></li>
+                <li><a href="../tools.html">Tools</a></li>
+            </ul>
+            
+            <div class="menu-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav">
+        <div class="mobile-nav-close">
+            <i class="fa-solid fa-xmark"></i>
+        </div>
+        <ul class="mobile-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="../academics.html">Academics</a></li>
+            <li><a href="../notes.html">Notes</a></li>
+            <li><a href="../career.html" class="active">Career</a></li>
+            <li><a href="../scholarship.html">Scholarship</a></li>
+            <li><a href="../support.html">Support</a></li>
+            <li><a href="../tools.html">Tools</a></li>
+        </ul>
+    </div>
+    <div class="overlay-blur"></div>
+
+    <!-- Page Banner -->
+    <div class="page-banner" style="padding: 140px 0 60px 0;">
+        <div class="container" style="text-align: center;">
+            <div class="page-banner-content scroll-reveal">
+                <div class="breadcrumb" style="font-family: monospace; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 1rem;">
+                    <a href="../career.html" style="color:var(--primary-red); text-decoration:none;">CAREER HUB</a> &gt; INTERNSHIPS
+                </div>
+                <div class="section-badge" style="margin-bottom: 1rem;"><i class="fa-solid fa-briefcase"></i> CAREER OPPORTUNITIES</div>
+                <h1>Internship <span class="gradient-text">Hub</span></h1>
+                <p>Explore curated opportunities to jumpstart your professional career.</p>
+                <div class="red-divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <section style="padding: 20px 0 80px 0;">
+        <div class="container">
+            
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-input-wrapper">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="intern-search" class="search-input" placeholder="Search internships, roles, or companies..." oninput="filterInternships()">
+                </div>
+            </div>
+
+            <!-- Back to Career link -->
+            <div style="text-align: center; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap;">
+                <a href="../career.html" class="btn btn-secondary" style="border-radius: 50px; padding: 10px 24px; font-size: 0.9rem;">
+                    <i class="fa-solid fa-arrow-left" style="margin-right: 8px;"></i> Back to Career Hub
+                </a>
+                <a href="selector.html" class="btn btn-primary" style="border-radius: 50px; padding: 10px 24px; font-size: 0.9rem; text-decoration: none;">
+                    <i class="fa-solid fa-wand-magic-sparkles" style="margin-right: 8px;"></i> Internship Finder Tool
+                </a>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="intern-grid" id="intern-container">
+                <div style="color: var(--text-muted); text-align: center; grid-column: 1/-1; padding: 40px;">Loading internship opportunities...</div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Detailed View Popup -->
+    <div id="intern-popup" class="sch-popup" onclick="closeInternPopup(event)">
+        <div class="popup-card" onclick="event.stopPropagation()">
+            <span class="popup-close" onclick="closeInternPopup(null)">&times;</span>
+            <div id="popup-header" class="popup-header"></div>
+            <div class="popup-body">
+                <div id="popup-company" style="color: var(--primary-red); font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 0.5rem;"></div>
+                <h2 id="popup-title" class="gradient-text" style="font-size: 2.2rem; margin-bottom: 2rem; line-height: 1.1; color: white;"></h2>
+                
+                <div class="detail-row">
+                    <div class="detail-item">
+                        <span>Category</span>
+                        <span id="detail-cat"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Duration</span>
+                        <span id="detail-duration"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Location</span>
+                        <span id="detail-loc"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Stipend</span>
+                        <span id="detail-stipend"></span>
+                    </div>
+                    <div class="detail-item">
+                        <span>Deadline</span>
+                        <span id="detail-deadline"></span>
+                    </div>
+                </div>
+
+                <div class="intern-description" id="popup-description"></div>
+                
+                <div style="margin-top: 3rem; display: flex; justify-content: center;">
+                    <a id="popup-apply-link" href="#" target="_blank" class="intern-btn btn-apply" style="max-width: 300px; padding: 18px 40px; font-size: 1rem;">Apply for Internship <i class="fa-solid fa-arrow-right" style="margin-left: 10px;"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Glass Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom" style="border-top: none; padding-top: 0;">
+                <p>© SFI MACE 2026. All rights reserved.</p>
+                <a href="#" class="developer-tag">&lt;/&gt; Developed with MACE Pride</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="../js/main.js"></script>
+    <script src="../js/canvas-bg.js"></script>
+    <script src="../js/storage.js"></script>
+
+    <script>
+        let allInternships = [];
+
+        window.addEventListener('load', async () => {
+            if (window.SFI_STORAGE && window.SFI_STORAGE.fetchLiveR2Data) {
+                await window.SFI_STORAGE.fetchLiveR2Data();
+            }
+
+            const data = window.SFI_STORAGE.getData();
+            allInternships = data.internships || [];
+            renderInternships(allInternships);
+        });
+
+        function renderInternships(items) {
+            const container = document.getElementById('intern-container');
+            if (items.length === 0) {
+                container.innerHTML = '<p style="color:#666; text-align:center; grid-column:1/-1; padding: 100px 0;">No internships found matching your criteria.</p>';
+                return;
+            }
+
+            const sortedItems = [...items].sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+            container.innerHTML = sortedItems.map(int => {
+                const isLatest = (Date.now() - (int.timestamp || 0)) < (7 * 24 * 60 * 60 * 1000);
+                
+                return `
+                    <div class="intern-card">
+                        <div class="intern-img-box" style="background-image: url('${int.image || 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?q=80&w=2070'}')">
+                            <div class="intern-badge-stack">
+                                ${isLatest ? '<span class="badge latest">LATEST</span>' : ''}
+                                <span class="badge category">${int.category || 'General'}</span>
+                            </div>
+                        </div>
+                        <div class="intern-content">
+                            <div class="intern-company">${int.company}</div>
+                            <h3 class="intern-title">${int.title}</h3>
+                            <div class="intern-deadline">
+                                <i class="fa-solid fa-clock"></i> Deadline: ${int.deadline || 'N/A'}
+                            </div>
+                            <div class="intern-footer">
+                                <button class="intern-btn btn-view" onclick="viewInternship('${int.id}')">View Details</button>
+                                <a href="${int.link || '#'}" target="_blank" class="intern-btn btn-apply">Apply</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function viewInternship(id) {
+            const int = allInternships.find(i => i.id === id);
+            if (!int) return;
+
+            document.getElementById('popup-header').style.backgroundImage = `url('${int.image}')`;
+            document.getElementById('popup-company').innerText = int.company;
+            document.getElementById('popup-title').innerText = int.title;
+            document.getElementById('detail-cat').innerText = int.category || 'General';
+            document.getElementById('detail-duration').innerText = int.duration || 'N/A';
+            document.getElementById('detail-loc').innerText = int.location || 'Remote';
+            document.getElementById('detail-stipend').innerText = int.stipend || 'N/A';
+            document.getElementById('detail-deadline').innerText = int.deadline || 'N/A';
+            document.getElementById('popup-description').innerHTML = int.description || '<p>No description available.</p>';
+            document.getElementById('popup-apply-link').href = int.link || '#';
+
+            document.getElementById('intern-popup').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeInternPopup(e) {
+            if (!e || e.target.id === 'intern-popup' || e.target.className === 'popup-close') {
+                document.getElementById('intern-popup').style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        function filterInternships() {
+            const query = document.getElementById('intern-search').value.toLowerCase().trim();
+
+            const filtered = allInternships.filter(int => {
+                const tMatch = int.title.toLowerCase().includes(query);
+                const cMatch = int.company.toLowerCase().includes(query);
+                const catMatch = (int.category && int.category.toLowerCase().includes(query));
+                
+                return tMatch || cMatch || catMatch;
+            });
+
+            renderInternships(filtered);
+        }
+    </script>
+</body>
+</html>
